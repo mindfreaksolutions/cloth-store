@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloth Store Admin</title>
+    @Styles.Render("~/Content/adminCss")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="landing-container">
+        <!-- Header -->
+        <header class="navbar navbar-inverse navbar-fixed-top">
+            <div class="navbar-con">
+                <!-- Nav Left -->
+                <ul class="navbar-nav-custom nav-left">
+                    <li>
+                        <a href="@ViewBag.previousURL"><i class="fa fa-arrow-left"></i> Back</a>
+                    </li>
+                </ul>
+                <!-- END Nav Left -->
+                <!-- Logo -->
+                <a href="page_landing.html" class="navbar-brand">
+                    ShopINdeal
+                </a>
+                <!-- END Logo -->
+            </div>
+        </header>
+        <!-- END Header -->
+        <!-- Section Promo Image -->
+        <div class="landing-section-outer">
+            <div class="landing-section text-center">
+                <div id="page-content" class="land-page">
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+        <!-- END Section Promo Image -->
+    </div>
+    <!-- END Landing Container -->
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/adminJs")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

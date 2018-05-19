@@ -1,0 +1,317 @@
+﻿
+@{
+    ViewBag.Title = "AddLocation";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloth Store Admin</title>
+    <style>
+        .legendsection {
+            font: normal 20px 'Bitter', serif;
+            color: #2A88AD;
+            margin-bottom: 5px;
+        }
+
+            .legendsection span {
+                background: #2A88AD;
+                padding: 5px 10px 5px 10px;
+                position: relative;
+                border-radius: 50%;
+                -webkit-border-radius: 50%;
+                -moz-border-radius: 50%;
+                border: 4px solid #fff;
+                font-size: 14px;
+                margin-left: 0px;
+                color: #fff;
+                margin-top: -3px;
+            }
+
+        .inner-wrap {
+            padding: 30px;
+            background: #F8F8F8;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            padding-bottom: 0.1px;
+            padding-top: 10px;
+        }
+
+        .required:after {
+            content: " *";
+            color: red;
+        }
+
+        .tab-content {
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    @if (ViewData.ModelState.Any(x => x.Value.Errors.Any()))
+    {
+        <div class="alert alert-danger col-md-12">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <strong>@Html.ValidationMessage("error", new { @class = "col-md-2" })</strong>
+        </div>
+        <div class="row">
+
+        </div>
+    }
+    @*   <form action="@Url.Action("AddProduct","Product")" method="post" id="productAdd" enctype="multipart/form-data" class="form-horizontal form-box gi-classic_hammer">*@
+    <h4 class="form-box-header"><i class="fa fa-circle-o"></i> ADD Category/Subcategory</h4>
+    <br />
+    <ul class="nav nav-pills">
+        <li class="active"><a data-toggle="pill" href="#supercategorymenu">Add Super Category</a></li>
+        <li><a id="addCategory" data-toggle="pill" href="#categorymenu">Add Category</a></li>
+        <li><a id="addSubcategory" data-toggle="pill" href="#subcategorymenu">Add Subcategory</a></li>
+    </ul>
+    <div class="tab-content">
+        <!-- Form Content -->
+        <div id="supercategorymenu" class="inner-wrap tab-pane fade in active">
+            <div class="row form-box">
+                <label class="control-label col-md-2 required" for="superCategoryName">Super Category</label>
+                <div class="col-md-4">
+                    <input type="text" id="superCategoryName" name="superCategoryName" class="form-control" placeholder="Super Category Name">
+                </div>
+            </div>
+            <div class="form-group form-actions">
+                <div class="col-md-2 col-md-offset-4">
+                    <input type="button" class="btn btn-danger form-control" id="superCategoryReset" value="Reset">
+                </div>
+                <div class="col-md-2">
+                    <input type="button" class="btn btn-success form-control" id="superCategorySubmit" value="Submit">
+                </div>
+            </div>
+        </div>
+        <div id="categorymenu" class="inner-wrap tab-pane fade">
+            <div class="row form-box">
+                <label class="control-label col-md-2 required" for="superCategory">Super Category</label>
+                <div class="col-md-4">
+                    <select class="form-control" id="superCategory" name="superCategory" required></select>
+                </div>
+            </div>
+            <div class="row form-box">
+                <label class="control-label col-md-2 required" for="categoryName">Category</label>
+                <div class="col-md-4">
+                    <input type="text" id="categoryName" name="categoryName" class="form-control" placeholder="Category Name">
+                </div>
+            </div>
+            <div class="form-group form-actions">
+                <div class="col-md-2 col-md-offset-4">
+                    <input type="button" class="btn btn-danger form-control" id="categoryReset" value="Reset">
+                </div>
+                <div class="col-md-2">
+                    <input type="button" class="btn btn-success form-control" id="categorySubmit" value="Submit">
+                </div>
+            </div>
+        </div>
+        <div id="subcategorymenu" class="inner-wrap tab-pane fade">
+            <div class="row form-box">
+                <label class="control-label col-md-2 required" for="superSubcategory">Super Category</label>
+                <div class="col-md-4">
+                    <select class="form-control" id="superSubcategory" name="superCategory" required></select>
+                </div>
+            </div>
+            <div class="row form-box">
+                <label class="control-label col-md-2 required" for="category">Category</label>
+                <div class="col-md-4">
+                    <select class="form-control" id="category" name="category" required></select>
+                </div>
+            </div>
+            <div class="row form-box">
+                <label class="control-label col-md-2 required" for="subCategoryName">Subcategory</label>
+                <div class="col-md-4">
+                    <input type="text" id="subCategoryName" name="subCategoryName" class="form-control" placeholder="Subcategory Name">
+                </div>
+            </div>
+            <div class="form-group form-actions">
+                <div class="col-md-2 col-md-offset-4">
+                    <input type="button" class="btn btn-danger form-control" id="subCategoryReset" value="Reset">
+                </div>
+                <div class="col-md-2">
+                    <input type="button" class="btn btn-success form-control" id="subCategorySubmit" value="Submit">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END First Step -->
+    <!-- Form Buttons -->
+    <!-- END Form Buttons -->
+    <!-- END Form Content -->
+    @*</form>*@
+    <!-- END Basic Form Wizard -->
+</body>
+</html>
+@section scripts {
+    <script>
+        //Super Category
+        $("#superCategorySubmit").on("click", function () {
+            var superCategory_Name = $("#superCategoryName");
+            if (superCategory_Name.val() == "") {
+                alert("Super Category Name Must Be Enter");
+                return false;
+            }
+            $.ajax({
+                type: "POST",
+                url: "/CategorySubcategory/AddSuperCategory",
+                data: { superCategoryName: superCategory_Name.val() },
+                dataType: "json",
+                success: function (response) {
+                    alert(response.data);
+                    if (response.status) {
+                        superCategory_Name.val("");
+                    }
+                },
+                error: function () {
+                    alert("Something went wrong");
+                }
+            });
+        });
+        $("#superCategoryReset").on("click", function () {
+            $("#superCategoryName").val("");
+        });
+        //Category
+        $("#addCategory").on("click", function () {
+            $.ajax({
+                type: "GET",
+                url: "/CategorySubcategory/LoadSuperCategory",
+                //data: { stateName: state_Name.val() },
+                dataType: "json",
+                success: function (response) {
+                    $("#superCategory").empty();
+                    $("#superCategory").append("<option value=''>----Select Super Category----</option>");
+                    if (response.status) {
+                        for (var i = 0; i < response.superCategory.length; i++) {
+                            $("#superCategory").append("<option value=" + response.superCategory[i].Key + ">" + response.superCategory[i].Object.superCategoryName + "</option>");
+                        }
+                    }
+                },
+                error: function () {
+                }
+            });
+            $("#categoryName").val("");
+        });
+        $("#categorySubmit").on("click", function () {
+            var superCategory_ = $("#superCategory option:selected");
+            var category_Name = $("#categoryName");
+            if (category_Name.val() == "") {
+                alert("Category Name Must Be Enter");
+                return false;
+            }
+            var categoryArray = {
+                categoryName: category_Name.val(),
+                superCategory: superCategory_.val()
+            }
+            $.ajax({
+                type: "POST",
+                url: "/CategorySubcategory/AddCategory",
+                data: categoryArray,
+                dataType: "json",
+                success: function (response) {
+                    alert(response.data);
+                    if (response.status) {
+                        category_Name.val("");
+                    }
+                },
+                error: function () {
+                    alert("Something went wrong");
+                }
+            });
+        });
+        $("#categoryReset").on("click", function () {
+            $("#categoryName").val("");
+        });
+
+        //Subcategory
+        $("#addSubcategory").on("click", function () {
+            $.ajax({
+                type: "GET",
+                url: "/CategorySubcategory/LoadSuperCategory",
+                //data: { stateName: state_Name.val() },
+                dataType: "json",
+                success: function (response) {
+                    $("#superSubcategory").empty();
+                    $("#superSubcategory").append("<option value=''>----Select Super Category----</option>");
+                    if (response.status) {
+                        for (var i = 0; i < response.superCategory.length; i++) {
+                            $("#superSubcategory").append("<option value=" + response.superCategory[i].Key + ">" + response.superCategory[i].Object.superCategoryName + "</option>");
+                        }
+                    }
+                    $("#category").empty();
+                    $("#category").append("<option value=''>----Select Category----</option>");
+                },
+                error: function () {
+                }
+            });
+            $("#subCategoryName").val("");
+        });
+        $("#superSubcategory").on("change", function () {
+            var superSubcategory_ = $("#superSubcategory option:selected");
+            $.ajax({
+                type: "GET",
+                url: "/CategorySubcategory/LoadCategory",
+                data: { superCategoryKey: superSubcategory_.val() },
+                dataType: "json",
+                success: function (response) {
+                    $("#category").empty();
+                    $("#category").append("<option value=''>----Select Category----</option>");
+                    if (response.status) {
+                        for(var i=0;i<response.category.length;i++)
+                        {
+                            $("#category").append("<option value=" + response.category[i].Key + ">" + response.category[i].Object.categoryName + "</option>");
+                        }
+                    }
+                },
+                error: function () {
+                }
+            });
+            $("#subCategoryName").val("");
+        });
+        $("#subCategorySubmit").on("click", function () {
+            var superCategory_ = $("#superSubcategory option:selected");
+            var category_ = $("#category option:selected");
+            var subCategory_Name = $("#subCategoryName");
+            if (superCategory_.val() == "") {
+                alert("Super Category Must Be Selected");
+                return false;
+            }
+            if (category_.val() == "") {
+                alert("Category Must Be Selected");
+                return false;
+            }
+            if (subCategory_Name.val() == "") {
+                alert("Subcategory Name Must Be Enter");
+                return false;
+            }
+            var subCategoryArray = {
+                category: category_.val(),
+                subCategoryName: subCategory_Name.val()
+            }
+            $.ajax({
+                type: "POST",
+                url: "/CategorySubcategory/AddSubcategory",
+                data: subCategoryArray,
+                dataType: "json",
+                success: function (response) {
+                    alert(response.data);
+                    if (response.status) {
+                        subCategory_Name.val("");
+                    }
+                },
+                error: function () {
+                    alert("Something went wrong");
+                }
+            });
+        });
+        $("#subCategoryReset").on("click", function () {
+            $("#subCategoryName").val("");
+        });
+    </script>
+
+}

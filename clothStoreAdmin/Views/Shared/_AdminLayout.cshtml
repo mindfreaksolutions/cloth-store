@@ -1,0 +1,194 @@
+﻿@using clothStoreAdmin.ViewModels;
+@{
+    var us = new UserSession();
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloth Store Admin</title>
+    @Styles.Render("~/Content/adminCss")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div id="page-container">
+        <header class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <!-- Mobile Navigation, Shows up  on smaller screens -->
+            <ul class="navbar-nav-custom hidden-md hidden-lg">
+                <li class="divider-vertical"></li>
+                <li>
+                    <!-- It is set to open and close the main navigation on smaller screens. The class .navbar-main-collapse was added to aside#page-sidebar -->
+                    <a href="javascript:void(0)" data-toggle="collapse" data-target=".navbar-main-collapse">
+                        <i class="fa fa-bars"></i>
+                    </a>
+                </li>
+            </ul>
+            <!-- END Mobile Navigation -->
+            <!-- Logo -->
+            <a href="index.html" class="navbar-brand">ShopINdeal</a>
+
+            <!-- Loading Indicator, Used for demostrating how loading of widgets could happen, check main.js - uiDemo() -->
+            <div id="loading" class="pull-left"><i class="fa fa-certificate fa-spin"></i></div>
+
+            <!-- Header Widgets -->
+            <!-- You can create the widgets you want by replicating the following. Each one exists in a <li> element -->
+            <ul id="widgets" class="navbar-nav-custom pull-right">
+
+                <li class="divider-vertical"></li>
+
+                <!-- User Menu -->
+                <li class="dropdown pull-right dropdown-user">
+                    <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">@us.fullName<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <!-- Just a button demostrating how loading of widgets could happen, check main.js- - uiDemo() -->
+                        @*<li>
+                            <a href="javascript:void(0)" class="loading-on"><i class="fa fa-refresh"></i> Refresh</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>*@
+                            <!-- Modal div is at the bottom of the page before including javascript code -->
+                            @*<a href="#modal-user-settings" role="button" data-toggle="modal"><i class="fa fa-user"></i> User Profile</a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)"><i class="fa fa-wrench"></i> App Settings</a>
+                        </li>
+                        <li class="divider"></li>*@
+                        <li>
+                            <a href="@Url.Action("LogOut","Admin")"><i class="fa fa-lock"></i> Log Out</a>
+                        </li>
+                    </ul>
+                </li>
+                <!-- END User Menu -->
+            </ul>
+            <!-- END Header Widgets -->
+        </header>
+        <!-- END Header -->
+        <!-- Inner Container -->
+        <div id="inner-container">
+            <!-- Sidebar -->
+            <aside id="page-sidebar" class="collapse navbar-collapse navbar-main-collapse">
+                <!-- Sidebar search -->
+                <form id="sidebar-search" action="page_search_results.html" method="post">
+                    <div class="input-group">
+                        <input type="text" id="sidebar-search-term" name="sidebar-search-term" placeholder="Search..">
+                        <button><i class="fa fa-search"></i></button>
+                    </div>
+                </form>
+                <!-- END Sidebar search -->
+                <!-- Primary Navigation -->
+                <nav id="primary-nav">
+                    <ul>
+                        <li>
+                            <a href="@Url.Action("Index","Admin")" class="active"><i class="fa fa-fire"></i>Dashboard</a>
+                        </li>
+                        @*<li>
+                                <a href="page_ui_elements.html"><i class="fa fa-glass"></i>UI Elements</a>
+                            </li>
+                            <li>
+                                <a href="page_typography.html"><i class="fa fa-font"></i>Typography</a>
+                            </li>*@
+                        <li>
+                            <a href="#"><i class="fa fa-circle"></i>Products</a>
+                            <ul>
+                                @{
+                                    if (us.designation.Equals("shop owner"))
+                                    {
+                                        <li>
+                                            <a href="@Url.Action("AddProduct","Product")"><i class="fa fa-plus"></i>Add Products</a>
+                                        </li>
+                                    }
+                                }
+                                <li>
+                                    <a href="@Url.Action("ActiveProductList","Product")"><i class="fa fa-list"></i>Active Products</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("InactiveProductList","Product")"><i class="fa fa-list"></i>Inactive Products</a>
+                                </li>
+                            </ul>
+                        </li>
+                        @{
+                            if (us.designation.Equals("admin"))
+                            {
+                                <li>
+                                    <a href="#"><i class="fa fa-location-arrow"></i>State & City</a>
+                                    <ul>
+                                        <li>
+                                            <a href="@Url.Action("AddLocation","Location")"><i class="fa fa-plus"></i>Add State/City</a>
+                                        </li>
+                                        <li>
+                                            <a href="@Url.Action("ActiveLocationList","Location")"><i class="fa fa-list"></i>Active State/City</a>
+                                        </li>
+                                        <li>
+                                            <a href="@Url.Action("InactiveLocationList","Location")"><i class="fa fa-list"></i>Inactive State/City</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa fa-circle"></i>Category & SubCategory</a>
+                                    <ul>
+                                        <li>
+                                            <a href="@Url.Action("AddCategorySubcategory","CategorySubcategory")"><i class="fa fa-plus"></i>Add Category/SubCategory</a>
+                                        </li>
+                                        <li>
+                                            <a href="@Url.Action("ActiveCatSubCatList","CategorySubcategory")"><i class="fa fa-list"></i>Active Category/SubCategory</a>
+                                        </li>
+                                        <li>
+                                            <a href="@Url.Action("InactiveCatSubCatList","CategorySubcategory")"><i class="fa fa-list"></i>Inactive Category/SubCategory</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
+                        }
+                        <li>
+                            <a href="page_login.html"><i class="fa fa-info"></i>About Us</a>
+                        </li>
+                        <li>
+                            <a href="page_landing.html"><i class="fa fa-circle"></i>Contact Us</a>
+                        </li>
+                    </ul>
+                </nav>
+                <!-- END Primary Navigation -->
+                <!-- Demo Theme Options -->
+                @*<div id="theme-options" class="text-left visible-md visible-lg">
+                        <a href="javascript:void(0)" class="btn btn-theme-options"><i class="fa fa-cog"></i> Theme Options</a>
+                        <div id="theme-options-content">
+                            <h5>Color Themes</h5>
+                            <ul class="theme-colors clearfix">
+                                <li class="active">
+                                    <a href="javascript:void(0)" class="themed-background-default themed-border-default" data-theme="default" data-toggle="tooltip" title="Default"></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)" class="themed-background-deepblue themed-border-deepblue" data-theme="css/themes/deepblue.css" data-toggle="tooltip" title="DeepBlue"></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)" class="themed-background-deepwood themed-border-deepwood" data-theme="css/themes/deepwood.css" data-toggle="tooltip" title="DeepWood"></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)" class="themed-background-deeppurple themed-border-deeppurple" data-theme="css/themes/deeppurple.css" data-toggle="tooltip" title="DeepPurple"></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)" class="themed-background-deepgreen themed-border-deepgreen" data-theme="css/themes/deepgreen.css" data-toggle="tooltip" title="DeepGreen"></a>
+                                </li>
+                            </ul>
+                            <h5>Header</h5>
+                            <label id="topt-fixed-header-top" class="switch switch-success" data-toggle="tooltip" title="Top fixed header"><input type="checkbox"><span></span></label>
+                            <label id="topt-fixed-header-bottom" class="switch switch-success" data-toggle="tooltip" title="Bottom fixed header"><input type="checkbox"><span></span></label>
+                            <label id="topt-fixed-layout" class="switch switch-success" data-toggle="tooltip" title="Fixed layout (for large resolutions)"><input type="checkbox"><span></span></label>
+                        </div>
+                    </div>*@
+                <!-- END Demo Theme Options -->
+            </aside>
+            <!-- END Sidebar -->
+        </div>
+        <!--End Inner Container -->
+        <div id="page-content">
+            @RenderBody()
+        </div>
+    </div>
+</body>
+</html>
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/adminJs")
+@RenderSection("scripts", required: false)

@@ -1,0 +1,158 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLandingLayout.cshtml";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloth Store Admin</title>
+    <style>
+    </style>
+</head>
+<body>
+   @if (ViewData.ModelState.Any(x => x.Value.Errors.Any()))
+   {
+    <div class="alert alert-danger col-md-12">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <strong>@Html.ValidationMessage("error",new { @class="col-md-2"})</strong>
+    </div>
+    <div class="row">
+
+    </div>
+    }
+
+    <form action="@Url.Action("Registration","Admin")" method="post" enctype="multipart/form-data" class="form-horizontal form-box">
+        <!-- Form Header -->
+        <h4 class="form-box-header"><i class="fa fa-user"></i> REGISTRATION</h4>
+
+        <!-- Form Content -->
+        <div class="form-box-content">
+            <div class="form-group">
+                <label class="control-label col-md-2" for="contactNo">Mobile No *</label>
+                <div class="col-md-4">
+                    <input type="text" name="contactNo" value="" maxlength="10" class="form-control" placeholder="Mobile Number without contry code" required>
+                </div>
+                <label class="control-label col-md-2" for="emailId">Email *</label>
+                <div class="col-md-4">
+                    <input type="email" id="emailId" name="emailId" value="" class="form-control" placeholder="Email">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2" for="password">Password *</label>
+                <div class="col-md-4">
+                    <input type="password" id="password" name="password" value="" class="form-control" minle="" placeholder="Password">
+                </div>
+                <label class="control-label col-md-2" for="confirmPassword">Retype Password *</label>
+                <div class="col-md-4">
+                    <input type="password" id="confirmPassword" name="confirmPassword" value="" class="form-control" placeholder="Retype Password">
+                </div>
+            </div>
+            <!--END Step Info-->
+            <div class="form-group">
+                <label class="control-label col-md-2" for="firstName">First Name *</label>
+                <div class="col-md-4">
+                    <input type="text" id="firstName" value="" name="firstName" class="form-control" placeholder="First Name" required>
+                </div>
+                <label class="control-label col-md-2" for="lastName">Last Name *</label>
+                <div class="col-md-4">
+                    <input type="text" id="lastName" value="" name="lastName" class="form-control" placeholder="Last Name" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2" for="address">Address *</label>
+                <div class="col-md-10">
+                    <input type="text" id="address" value="" name="address" class="form-control" placeholder="Address" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2" for="state">State *</label>
+                <div class="col-md-4">
+                    <select class="form-control" id="state" name="state" required>
+                    </select>
+                    <input type="hidden" id="stateName" name="stateName" />
+                </div>
+                <label class="control-label col-md-2" for="city">City *</label>
+                <div class="col-md-4">
+                    <select class="form-control" id="city" name="city" required>
+                    </select>
+                    <input type="hidden" id="cityName" name="cityName" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2">Profile Image</label>
+                <div class="col-md-10">
+                    <input type="file" id="uploadProfile" name="uploadProfile" />
+                </div>
+            </div>
+            <!-- Form Buttons -->
+            <div class="form-group form-actions">
+                <div class="col-md-2 col-lg-offset-4">
+                    <input type="reset" class="btn btn-danger form-control" id="reset" value="Reset">
+                </div>
+                <div class="col-md-2">
+                    <input type="submit" class="btn btn-success form-control" id="submit" value="Submit">
+                </div>
+            </div>
+            <!-- END Form Buttons -->
+        </div>
+        <!-- END Form Content -->
+    </form>
+    <!-- END Basic Form Wizard -->
+</body>
+</html>
+
+@section scripts {
+
+    <!-- Javascript code only for this page -->
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $.ajax({
+                type: "GET",
+                url: "/Location/LoadState",
+                dataType: "json",
+                success: function (response) {
+                    $("#state").append("<option value=''>----Select State----</option>");
+                    if (response.status) {
+                        for (var i = 0; i < response.state.length; i++) {
+                            $("#state").append("<option class=form-control value='" + response.state[i].Key + "'>" + response.state[i].Object.stateName + "</option>");
+                        }
+                        $("#city").append("<option value=''>----Select City----</option>");
+                    }
+                },
+                error: function () {
+                   
+                }
+            });
+        });
+        $("#state").on("change", function () {
+            var stateSelected = $("#state option:selected");
+            $("#stateName").val(stateSelected.text());
+            $.ajax({
+                type: "POST",
+                url: "/Location/LoadCity",
+                data: { stateKey: stateSelected.val() },
+                dataType: "json",
+                success: function (response) {
+                    $("#city").empty();
+                    $("#city").append("<option value=''>----Select City----</option>");
+                    if (response.status) {
+                        for (var i = 0; i < response.city.length; i++) {
+                            $("#city").append("<option class=form-control value=" + response.city[i].Key + ">" + response.city[i].Object.cityName + "</option>");
+                        }
+                    }
+                },
+                error: function () {
+                    $("#city").empty();
+                    $("#city").append("<option value=''>----Select City----</option>");
+                }
+            });
+        });
+        $("#city").on("change", function () {
+            $("#cityName").val($("#city option:selected").text());
+        });
+    </script>
+}

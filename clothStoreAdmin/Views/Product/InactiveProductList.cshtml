@@ -1,0 +1,97 @@
+﻿@using clothStoreAdmin.ViewModels
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var us = new UserSession();
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloth Store Admin</title>
+    <style>
+        .hideActive {
+            display: none;
+        }
+        /*td.details-control {
+            background: url('../../assets/jquery.datatables/details_open.png') no-repeat center center;
+            cursor: pointer;
+        }
+        tr.details td.details-control {
+            background: url('../../assets/jquery.datatables/details_open.png') no-repeat center center;
+        }*/
+    </style>
+</head>
+<body>
+    <h4 class="form-box-header"><i class="fa fa-list"></i> INACTIVE PRODUCT LIST</h4>
+    <br />
+    <table id="productInactiveList" class="table table-responsive table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                @*                <th></th>*@
+                <th>Sr. No.</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Subcategory</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Action</th>
+                @*<th>Delete</th>*@
+            </tr>
+        </thead>
+    </table>
+    <!-- END Datatables -->
+</body>
+</html>
+
+@section scripts {
+    <script>
+        /* Initialize Datatables */
+        $("#productInactiveList").dataTable({
+            columnDefs: [{ orderable: false, targets: [0], visible: false }],
+            scrollY: "500px",
+            scrollCollapse: true,
+            processing: false,
+            serverSide: false,
+            deferRender: true,
+            ajax: {
+                url: '/Product/GetProductList',
+                type: "POST",
+                datatype: "json",
+                data: { productStatus: false },
+            },
+            columns: [
+                    { data: "productId", name: "productId", autoWidth: true },
+                    { data: "productTitle", name: "productTitle", autoWidth: true },
+                    { data: "productCategory", name: "productCategory", autoWidth: true },
+                    { data: "productSubCategory", name: "productSubCategory", autoWidth: true },
+                    { data: "productDescription", name: "productDescription", autoWidth: true },
+                    { data: "productActive", name: "productActive", autoWidth: true },
+                    {
+                        data: null,
+                        render: function (data, type, full, meta) {
+                            var action = '<a class="fa fa-edit" href="/Product/EditProduct?productId=' + full.productId + '&productStatus=Inactive"></a>&nbsp&nbsp<a class="fa fa-check hideActive" href="/Product/ActiveInactiveProduct?productId=' + full.productId + '&productStatus=Active"></a>';
+                            return action;
+                        }
+                    },
+                    //{
+                    //    data: null,
+                    //    render: function (data, type, row) {
+                    //        return '<a class="fa fa-check hideActive" href="/Product/ActiveInactiveProduct?productId=' + row.productId + '&productStatus=Active"></a>';
+                    //    }
+                    //},
+            ]
+        });
+        $(".dataTables_filter input").attr('placeholder', 'Search');
+        $("select").attr("class", "form-control");
+        $("input").attr("class", "form-control");
+        $("#example-datatables_info").attr("class", "dataTables_info col-sm-5 hidden-xs");
+        $("#example-datatables_paginate").attr("class", "dataTables_paginate paging_bootstrap col-sm-7 col-xs-12 clearfix");
+        if ("admin" === "@us.designation") {
+        }
+        else {
+            $(".hideActive").removeClass("hideActive");
+        }
+    </script>
+}
+

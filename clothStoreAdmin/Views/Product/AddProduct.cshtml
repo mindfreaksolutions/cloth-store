@@ -1,0 +1,361 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloth Store Admin</title>
+    <style>
+        .legendsection {
+            font: normal 20px 'Bitter', serif;
+            color: #2A88AD;
+            margin-bottom: 5px;
+        }
+
+            .legendsection span {
+                background: #2A88AD;
+                padding: 5px 10px 5px 10px;
+                position: relative;
+                border-radius: 50%;
+                -webkit-border-radius: 50%;
+                -moz-border-radius: 50%;
+                border: 4px solid #fff;
+                font-size: 14px;
+                margin-left: 0px;
+                color: #fff;
+                margin-top: -3px;
+            }
+
+        .inner-wrap {
+            padding: 30px;
+            background: #F8F8F8;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            padding-bottom: 0.1px;
+            padding-top: 10px;
+        }
+
+        .required:after {
+            content: " *";
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    @if (ViewData.ModelState.Any(x => x.Value.Errors.Any()))
+    {
+        <div class="alert alert-danger col-md-12">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <strong>@Html.ValidationMessage("error", new { @class = "col-md-2" })</strong>
+        </div>
+        <div class="row">
+
+        </div>
+    }
+    <form action="@Url.Action("AddProduct","Product")" method="post" id="productAdd" enctype="multipart/form-data" class="form-horizontal form-box">
+        <h4 class="form-box-header"><i class="fa fa-circle-o"></i> ADD PRODUCT</h4>
+        <br />
+        <div class="legendsection"><span>1</span>Product Details</div>
+        <!-- Form Content -->
+        <div class="inner-wrap">
+            <div class="row form-box">
+                <label class="control-label col-md-2 required" for="productCategory">Category</label>
+                <div class="col-md-4">
+                    <select class="form-control" id="productCategory" name="productCategory" required></select>
+                    <input type="hidden" id="productCategoryName" name="productCategoryName" />
+                </div>
+                <label class="control-label col-md-2 required" for="productSubCategory">SubCategory</label>
+                <div class="col-md-4">
+                    <select class="form-control" id="productSubCategory" name="productSubCategory" required></select>
+                    <input type="hidden" id="productSubCategoryName" name="productSubCategoryName" />
+                </div>
+            </div>
+            <div class="row form-box">
+                <label class="control-label col-md-2 required" for="productTitle">Title</label>
+                <div class="col-md-4">
+                    <input type="text" id="productTitle" name="productTitle" class="form-control" placeholder="Product Title" required>
+                </div>
+                <label class="control-label col-md-2 required" for="productDescription">Description</label>
+                <div class="col-md-4">
+                    <textarea id="productDescription" name="productDescription" rows="6" class="form-control" placeholder="Product Description" required></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- END First Step -->
+
+        <div class="legendsection"><span>2</span>Product Discount &amp; Coupan</div>
+        <div class="inner-wrap">
+            <div class="row form-box">
+                <label class="control-label col-md-2" for="productDiscount">Discount</label>
+                <div class="col-md-4">
+                    <input type="text" id="productDiscount" name="productDiscount" class="form-control" placeholder="Discount In Percent">
+                </div>
+                <label class="control-label col-md-2" for="productCoupan">Coupan</label>
+                <div class="col-md-4">
+                    <input type="text" id="productCoupan" name="productCoupan" class="form-control" placeholder="Coupan Code">
+                </div>
+            </div>
+        </div>
+        <!-- END Second Step -->
+        <div class="legendsection"><span>3</span>Product Varients</div>
+        <!-- Third Step -->
+        <div class="inner-wrap">
+            <div class="row form-box">
+                <label class="control-label col-md-2" for="productPrice">Price</label>
+                <div class="col-md-4">
+                    <input type="text" id="productPrice" class="form-control" placeholder="Product Price">
+                </div>
+                <label class="control-label col-md-2" for="productQuantity">Quantity</label>
+                <div class="col-md-4">
+                    <input type="number" id="productQuantity" class="form-control" placeholder="Product Quantity">
+                </div>
+            </div>
+            <div class="row form-box">
+                <label class="control-label col-md-2" for="productColor">Color</label>
+                <div class="col-md-4">
+                    <select class="form-control" id="productColor">
+                        <option value="">---Select Color---</option>
+                        <option value="Red">Red</option>
+                        <option value="Green">Green</option>
+                    </select>
+                </div>
+                <label class="control-label col-md-2" for="productSize">Size</label>
+                <div class="col-md-4">
+                    <select class="form-control" id="productSize">
+                        <option value="">---Select Size---</option>
+                        <option value="Small">Small</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Large">Large</option>
+                        <option value="Extra Large">Extra Large</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-2">
+                <input type="button" class="btn btn-success form-control" id="addVarients" value="Add">
+            </div>
+        </div>
+        <div class="table-responsive inner-wrap">
+            <table class="table table-hover form-box">
+                <thead>
+                    <tr>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Color</th>
+                        <th>Size</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="prodVarients"></tbody>
+            </table>
+        </div>
+        <!-- END Third Step -->
+        <div class="legendsection"><span>4</span>Product Images</div>
+        <!-- Fourth Step -->
+        <div class="inner-wrap">
+            <div class="row form-box">
+                <label class="control-label col-md-2" for="imageUploadFirst">Product First Image</label>
+                <div class="col-md-4">
+                    <input type="file" id="imageUploadFirst" name="imageUploadFirst" />
+                </div>
+                <label class="control-label col-md-2" for="imageUploadSecond">Product Second Image</label>
+                <div class="col-md-4">
+                    <input type="file" id="imageUploadSecond" name="imageUploadSecond" />
+                </div>
+            </div>
+            <div class="row form-box">
+                <label class="control-label col-md-2" for="imageUploadThird">Product Third Image</label>
+                <div class="col-md-4">
+                    <input type="file" id="imageUploadThird" name="imageUploadThird" />
+                </div>
+                <label class="control-label col-md-2" for="imageUploadFourth">Product Fourth Image</label>
+                <div class="col-md-4">
+                    <input type="file" id="imageUploadFourth" name="imageUploadFourth" />
+                </div>
+            </div>
+        </div>
+        <!-- END Fourth Step -->
+        <!-- Form Buttons -->
+        <div class="form-group form-actions">
+            <div class="col-md-2 col-md-offset-4">
+                <input type="reset" class="btn btn-danger form-control" id="reset" value="Reset">
+            </div>
+            <div class="col-md-2">
+                <input type="submit" class="btn btn-success form-control" id="submit" value="Submit">
+            </div>
+        </div>
+        <!-- END Form Buttons -->
+        <!-- END Form Content -->
+    </form>
+    <!-- END Basic Form Wizard -->
+</body>
+</html>
+
+@section scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.ajax({
+                type: "GET",
+                url: "/CategorySubcategory/LoadCategory",
+                dataType: "json",
+                success: function (response) {
+                    $("#productCategory").append("<option value=''>----Select Category----</option>");
+                    if (response.status) {
+                        for (var i = 0; i < response.category.length; i++) {
+                            $("#productCategory").append("<option class=form-control value='" + response.category[i].Key + "'>" + response.category[i].Object.categoryName + "</option>");
+                        }
+                        $("#productSubCategory").append("<option value=''>----Select Subcategory----</option>");
+                    }
+                },
+                error: function () {
+                }
+            });
+        });
+        //SubcategoryLoad
+        $("#productCategory").on("change", function () {
+            var categorySelected = $("#productCategory option:selected");
+            $("#productCategoryName").val(categorySelected.text());
+            $.ajax({
+                type: "POST",
+                url: "/CategorySubcategory/LoadSubcategory",
+                data: { categoryKey: categorySelected.val() },
+                dataType: "json",
+                success: function (response) {
+                    $("#productSubCategory").empty();
+                    $("#productSubCategory").append("<option value=''>----Select Subcategory----</option>");
+                    if (response.status) {
+                        for (var i = 0; i < response.subcategory.length; i++) {
+                            $("#productSubCategory").append("<option class=form-control value=" + response.subcategory[i].Key + ">" + response.subcategory[i].Object.subCategoryName + "</option>");
+                        }
+                    }
+                },
+                error: function () {
+                    $("#productSubCategory").empty();
+                    $("#productSubCategory").append("<option value=''>----Select Subcategory----</option>");
+                }
+            });
+        });
+
+        $("#productSubCategory").on("change", function () {
+            var subCategorySelected = $("#productSubCategory option:selected");
+            $("#productSubCategoryName").val(subCategorySelected.text());
+        });
+
+        //To add product varients on client side
+        $("#addVarients").on("click", function () {
+
+            var product_Price = $("#productPrice");
+            var product_Quantity = $("#productQuantity");
+            var product_Color = $("#productColor option:selected");
+            var product_Size = $("#productSize option:selected");
+
+            if (product_Price.val() == "") {
+                alert("Price Must Be Enter");
+                return false;
+            }
+            if (product_Quantity.val() == "") {
+                alert("Quantity Must Be Enter");
+                return false;
+            }
+            if (product_Color.val() == "") {
+                alert("Color Must Be Select");
+                return false;
+            }
+            if (product_Size.val() == "") {
+                alert("Size Must Be Select");
+                return false;
+            }
+            var row = "<tr><td>" + product_Price.val() + "</td><td>" + product_Quantity.val() + "</td><td>" + product_Color.text() + "</td><td>" + product_Size.text() + "<td class='col-md-2'><i class='fa fa-save saveVarients' onclick='saveVarients(this)' style='display:none;'></i>&nbsp;&nbsp;<i class='fa fa-edit editVarients' onclick='editVarients(this)'></i>&nbsp;&nbsp;<i class='fa fa-trash' onclick='removeVarients(this)'></i></td></tr>";
+            $("#prodVarients").append(row);
+
+            product_Price.val("");
+            product_Quantity.val("");
+            //product_Color.select().val("");
+            //product_Size.select().val("");
+        });
+
+        //To delete product varients on client side
+        function removeVarients(event) {
+            $(event).parent().parent().remove();
+        }
+
+        //To edit product varients on client side
+        function editVarients(event) {
+            var edit_Color = "<select class='form-control editColor'><option value=''>---Select Color---</option><option value='1'>Red</option><option value='2'>Green</option></select>";
+            var edit_Size = "<select class='form-control editSize'><option value=''>---Select Size---</option><option value='1'>Small</option><option value='2'>Medium</option><option value='3'>Large</option><option value='4'>Extra Large</option></select>";
+
+            var edit_Varients = $(event).parent().parent();
+            edit_Varients.find(".editVarients").hide();
+            edit_Varients.find(".saveVarients").show();
+            var edit_Array = edit_Varients.children("td");
+            $(edit_Array[0]).html("<input type='text' class='form-control editPrice' value='" + $(edit_Array[0]).text() + "'></input>");
+            $(edit_Array[1]).html("<input type='text' class='form-control editQuantity' value='" + $(edit_Array[1]).text() + "'></input>");
+            $(edit_Array[2]).html(edit_Color);
+            $(edit_Array[3]).html(edit_Size);
+        }
+
+        //To Save product varients on client side
+        function saveVarients(event) {
+            var save_Varients = $(event).parent().parent();
+            var save_Price = save_Varients.find(".editPrice");
+            var save_Quantity = save_Varients.find(".editQuantity");
+            var save_Color = save_Varients.find(".editColor option:selected");
+            var save_Size = save_Varients.find(".editSize option:selected");
+
+            if (save_Price.val() == "") {
+                alert("Price Must Be Enter");
+                return false;
+            }
+            if (save_Quantity.val() == "") {
+                alert("Quantity Must Be Enter");
+                return false;
+            }
+            if (save_Color.val() == "") {
+                alert("Color Must Be Select");
+                return false;
+            }
+            if (save_Size.val() == "") {
+                alert("Size Must Be Select");
+                return false;
+            }
+
+            var save_Array = save_Varients.children("td");
+            $(save_Array[0]).text(save_Price.val());
+            $(save_Array[1]).text(save_Quantity.val());
+            $(save_Array[2]).text(save_Color.text());
+            $(save_Array[3]).text(save_Size.text());
+
+            save_Varients.find(".editVarients").show();
+            save_Varients.find(".saveVarients").hide();
+        }
+
+        $("#submit").on("click", function () {
+            var s = $("#prodVarients > tr").each(function (i, element) { });
+            if (s.length <= 0) {
+                alert("At Least One Product Price, Quantity, Color and Size Must Be Define !");
+                return false;
+            }
+            for (var i = 0; i < s.length; i++) {
+                var prod_Price = s[i].children[0].innerText;
+                var prod_Quantity = s[i].children[1].innerText;
+                var prod_Color = s[i].children[2].innerText;
+                var prod_Size = s[i].children[3].innerText;
+                $("#productAdd").prepend("<input type='hidden' name='prodVarients[" + i + "].productPrice' value='" + prod_Price + "'></input>");
+                $("#productAdd").prepend("<input type='hidden' name='prodVarients[" + i + "].productQuantity' value='" + prod_Quantity + "'></input>");
+                $("#productAdd").prepend("<input type='hidden' name='prodVarients[" + i + "].productColor' value='" + prod_Color + "'></input>");
+                $("#productAdd").prepend("<input type='hidden' name='prodVarients[" + i + "].productSize' value='" + prod_Size + "'></input>");
+            }
+        });
+    </script>
+}
+
+
+
+
+

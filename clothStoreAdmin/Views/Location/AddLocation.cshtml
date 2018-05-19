@@ -1,0 +1,211 @@
+﻿
+@{
+    ViewBag.Title = "AddLocation";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloth Store Admin</title>
+    <style>
+        .legendsection {
+            font: normal 20px 'Bitter', serif;
+            color: #2A88AD;
+            margin-bottom: 5px;
+        }
+
+            .legendsection span {
+                background: #2A88AD;
+                padding: 5px 10px 5px 10px;
+                position: relative;
+                border-radius: 50%;
+                -webkit-border-radius: 50%;
+                -moz-border-radius: 50%;
+                border: 4px solid #fff;
+                font-size: 14px;
+                margin-left: 0px;
+                color: #fff;
+                margin-top: -3px;
+            }
+
+        .inner-wrap {
+            padding: 30px;
+            background: #F8F8F8;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            padding-bottom: 0.1px;
+            padding-top: 10px;
+        }
+
+        .required:after {
+            content: " *";
+            color: red;
+        }
+
+        .tab-content {
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    @if (ViewData.ModelState.Any(x => x.Value.Errors.Any()))
+    {
+        <div class="alert alert-danger col-md-12">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <strong>@Html.ValidationMessage("error", new { @class = "col-md-2" })</strong>
+        </div>
+        <div class="row">
+
+        </div>
+    }
+    @*   <form action="@Url.Action("AddProduct","Product")" method="post" id="productAdd" enctype="multipart/form-data" class="form-horizontal form-box gi-classic_hammer">*@
+    <h4 class="form-box-header"><i class="fa fa-circle-o"></i> ADD Location</h4>
+    <br />
+    <ul class="nav nav-pills">
+        <li class="active"><a data-toggle="pill" href="#statemenu">Add State</a></li>
+        <li><a id="addCity" data-toggle="pill" href="#citymenu">Add City</a></li>
+    </ul>
+    <div class="tab-content">
+        <!-- Form Content -->
+        <div id="statemenu" class="inner-wrap tab-pane fade in active">
+            <div class="row form-box">
+                <label class="control-label col-md-2 required" for="stateName">State</label>
+                <div class="col-md-4">
+                    <input type="text" id="stateName" name="stateName" class="form-control" placeholder="State Name">
+                </div>
+            </div>
+            <div class="form-group form-actions">
+                <div class="col-md-2 col-md-offset-4">
+                    <input type="button" class="btn btn-danger form-control" id="stateReset" value="Reset">
+                </div>
+                <div class="col-md-2">
+                    <input type="button" class="btn btn-success form-control" id="stateSubmit" value="Submit">
+                </div>
+            </div>
+        </div>
+        <div id="citymenu" class="inner-wrap tab-pane fade">
+            <div class="row form-box">
+                <label class="control-label col-md-2 required" for="state">State</label>
+                <div class="col-md-4">
+                    <select class="form-control" id="state" name="state" required>
+                        
+                    </select>
+                </div>
+            </div>
+            <div class="row form-box">
+                <label class="control-label col-md-2 required" for="cityName">City</label>
+                <div class="col-md-4">
+                    <input type="text" id="cityName" name="cityName" class="form-control" placeholder="City Name">
+                </div>
+            </div>
+            <div class="form-group form-actions">
+                <div class="col-md-2 col-md-offset-4">
+                    <input type="button" class="btn btn-danger form-control" id="cityReset" value="Reset">
+                </div>
+                <div class="col-md-2">
+                    <input type="button" class="btn btn-success form-control" id="citySubmit" value="Submit">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END First Step -->
+    <!-- Form Buttons -->
+    <!-- END Form Buttons -->
+    <!-- END Form Content -->
+    @*</form>*@
+    <!-- END Basic Form Wizard -->
+</body>
+</html>
+@section scripts {
+    <script>
+        //state
+        $("#stateSubmit").on("click", function () {
+            var state_Name = $("#stateName");
+            if (state_Name.val() == "") {
+                alert("State Name Must Be Enter");
+                return false;
+            }
+            $.ajax({
+                type: "POST",
+                url: "/Location/AddState",
+                data: { stateName: state_Name.val() },
+                dataType: "json",
+                success: function (response) {
+                    alert(response.data);
+                    if (response.status) {
+                        tate_Name.val("");
+                    }
+                },
+                error: function () {
+                    alert("Something went wrong");
+                }
+            });
+        });
+        $("#stateReset").on("click", function () {
+            $("#stateName").val("");
+        });
+        //city
+        $("#addCity").on("click", function () {
+            $.ajax({
+                type: "GET",
+                url: "/Location/LoadState",
+                //data: { stateName: state_Name.val() },
+                dataType: "json",
+                success: function (response) {
+                    $("#state").empty();
+                    $("#state").append("<option value=''>----Select State----</option>");
+                    if (response.status) {
+                        for(var i=0;i<response.state.length;i++)
+                        {
+                            $("#state").append("<option value=" + response.state[i].Key + ">" + response.state[i].Object.stateName + "</option>");
+                        }
+                    }
+                },
+                error: function () {
+                    
+                }
+            });
+            $("#cityName").val("");
+        });
+        $("#citySubmit").on("click", function () {
+            var state_ = $("#state option:selected");
+            var city_Name = $("#cityName");
+            if (state_.val() == "") {
+                alert("State Must Be Selected");
+                return false;
+            }
+            if (city_Name.val() == "") {
+                alert("City Name Must Be Enter");
+                return false;
+            }
+            var cityArray = {
+                state: state_.val(),
+                cityName: city_Name.val()
+            }
+            $.ajax({
+                type: "POST",
+                url: "/Location/AddCity",
+                data: cityArray,
+                dataType: "json",
+                success: function (response) {
+                    alert(response.data);
+                    if (response.status) {
+                        city_Name.val("");
+                    }
+                },
+                error: function () {
+                    alert("Something went wrong");
+                }
+            });
+        });
+        $("#cityReset").on("click", function () {
+            $("#cityName").val("");
+        });
+    </script>
+
+}

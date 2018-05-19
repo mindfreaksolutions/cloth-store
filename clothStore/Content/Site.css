@@ -1,0 +1,28 @@
+﻿.btnIndexViewMore {
+    border: none;
+    color: #fff;
+    display: inline-block;
+    padding: 5px 50px;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 18px;
+    border-radius: 0px;
+    font-family: 'Montserrat', sans-serif;
+    line-height: 46px;
+    background: #2d3a4b;
+    letter-spacing: 1px;
+    position: relative;
+    z-index: 1;
+    margin:40px 0px 0px 0px;
+}
+
+.user-acc i{
+    font-size:20px;
+}
+.user-basket i{
+    font-size:20px;
+}
+.search-open i{
+    font-size:20px;
+}
+
