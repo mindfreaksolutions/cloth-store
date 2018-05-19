@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using clothStoreAdmin.Models;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
 
 namespace clothStoreAdmin.Controllers
 {
@@ -30,34 +31,43 @@ namespace clothStoreAdmin.Controllers
             {
                 var firebase = FirebaseConnection.FirebaseDatabase();
                 var productImage = FirebaseConnection.FirebaseStorageConnection();
+                var imageName = new StringBuilder();
                 if (pivm.imageUploadFirst!=null)
                 {
-                    var imagePath = await productImage.Child("Product").Child(pivm.imageUploadFirst.FileName).PutAsync(pivm.imageUploadFirst.InputStream);
+                    imageName.Append(DateTime.Now.ToString("dd_MM_yyyy_hhmmss")).Append(Path.GetExtension(pivm.imageUploadFirst.FileName));
+                    var imagePath = await productImage.Child("Product").Child(imageName.ToString()).PutAsync(pivm.imageUploadFirst.InputStream);
                     cpvm.imageUploadFirst = imagePath;
-                    cpvm.imageUploadFirstName = pivm.imageUploadFirst.FileName;
+                    cpvm.imageUploadFirstName = imageName.ToString();
                 }
                 if (pivm.imageUploadSecond != null)
                 {
-                    var imagePath = await productImage.Child("Product").Child(pivm.imageUploadSecond.FileName).PutAsync(pivm.imageUploadSecond.InputStream);
+                    imageName = new StringBuilder();
+                    imageName.Append(DateTime.Now.ToString("dd_MM_yyyy_hhmmss")).Append(Path.GetExtension(pivm.imageUploadSecond.FileName));
+                    var imagePath = await productImage.Child("Product").Child(imageName.ToString()).PutAsync(pivm.imageUploadSecond.InputStream);
                     cpvm.imageUploadSecond = imagePath;
-                    cpvm.imageUploadSecondName = pivm.imageUploadSecond.FileName;
+                    cpvm.imageUploadSecondName = imageName.ToString();
                 }
                 if (pivm.imageUploadThird != null)
                 {
-                    var imagePath = await productImage.Child("Product").Child(pivm.imageUploadThird.FileName).PutAsync(pivm.imageUploadThird.InputStream);
+                    imageName = new StringBuilder();
+                    imageName.Append(DateTime.Now.ToString("dd_MM_yyyy_hhmmss")).Append(Path.GetExtension(pivm.imageUploadThird.FileName));
+                    var imagePath = await productImage.Child("Product").Child(imageName.ToString()).PutAsync(pivm.imageUploadThird.InputStream);
                     cpvm.imageUploadThird = imagePath;
-                    cpvm.imageUploadThirdName = pivm.imageUploadThird.FileName;
+                    cpvm.imageUploadThirdName = imageName.ToString();
                 }
                 if (pivm.imageUploadFourth != null)
                 {
-                    var imagePath = await productImage.Child("Product").Child(pivm.imageUploadFourth.FileName).PutAsync(pivm.imageUploadFourth.InputStream);
+                    imageName = new StringBuilder();
+                    imageName.Append(DateTime.Now.ToString("dd_MM_yyyy_hhmmss")).Append(Path.GetExtension(pivm.imageUploadFourth.FileName));
+                    var imagePath = await productImage.Child("Product").Child(imageName.ToString()).PutAsync(pivm.imageUploadFourth.InputStream);
                     cpvm.imageUploadFourth = imagePath;
-                    cpvm.imageUploadFourthName = pivm.imageUploadFourth.FileName;
+                    cpvm.imageUploadFourthName = imageName.ToString();
                 }
                 UserSession us = new UserSession();
                 cpvm.userId = us.userId;
                 var prodAdded = await firebase.Child("productMaster").Child(us.userId).PostAsync(cpvm, true);
                 data = "Product Added Successfully !";
+                ModelState.AddModelError("error", data);
             }
             catch (Exception productAddException)
             {

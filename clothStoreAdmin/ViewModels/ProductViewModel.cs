@@ -16,6 +16,10 @@ namespace clothStoreAdmin.ViewModels
             productActive = false;
             createdon = currentDate;
             updatedon = currentDate;
+            imageUploadFirst = null;
+            imageUploadSecond = null;
+            imageUploadThird = null;
+            imageUploadFourth = null;
         }
         public string productCategory { get; set; }
         public string productCategoryName { get; set; }
