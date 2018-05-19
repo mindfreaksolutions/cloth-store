@@ -19,7 +19,7 @@ namespace clothStoreAdmin.ViewModels
             imageUploadFirst = null;
             imageUploadSecond = null;
             imageUploadThird = null;
-            imageUploadFourth = null;
+            imageUploadFourth = string.Empty;
         }
         public string productCategory { get; set; }
         public string productCategoryName { get; set; }
