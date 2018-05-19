@@ -20,7 +20,6 @@ namespace clothStoreAdmin.ViewModels
             userActive = false;
             createdon = currentDate;
             updatedon = currentDate;
-            var str = string.Empty;
         }
         public string emailId { get; set; }
         public string firstName { get; set; }
