@@ -130,12 +130,26 @@
                                         <li>
                                             <a href="@Url.Action("AddCategorySubcategory","CategorySubcategory")"><i class="fa fa-plus"></i>Add Category/SubCategory</a>
                                         </li>
-                                        <li>
+                                        @*<li>
                                             <a href="@Url.Action("ActiveCatSubCatList","CategorySubcategory")"><i class="fa fa-list"></i>Active Category/SubCategory</a>
                                         </li>
                                         <li>
                                             <a href="@Url.Action("InactiveCatSubCatList","CategorySubcategory")"><i class="fa fa-list"></i>Inactive Category/SubCategory</a>
+                                        </li>*@
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa fa-circle"></i>Size &amp; Color</a>
+                                    <ul>
+                                        <li>
+                                            <a href="@Url.Action("AddProductVarient","ProductVarient")"><i class="fa fa-plus"></i>Add Size</a>
                                         </li>
+                                        @*<li>
+                                            <a href="@Url.Action("ActiveCatSubCatList","ProductVarient")"><i class="fa fa-list"></i>Active Size</a>
+                                        </li>
+                                        <li>
+                                            <a href="@Url.Action("InactiveCatSubCatList","ProductVarient")"><i class="fa fa-list"></i>Inactive Size</a>
+                                        </li>*@
                                     </ul>
                                 </li>
                             }

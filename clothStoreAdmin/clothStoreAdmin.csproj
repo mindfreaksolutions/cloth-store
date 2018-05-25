@@ -240,6 +240,7 @@
     <Compile Include="Controllers\CategorySubcategoryController.cs" />
     <Compile Include="Controllers\LocationController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\ProductVarientController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -254,6 +255,7 @@
     <Compile Include="ViewModels\CategorySubcategoryViewModel.cs" />
     <Compile Include="ViewModels\LocationViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
+    <Compile Include="ViewModels\ProductVarientViewModel.cs" />
     <Compile Include="ViewModels\ProductViewModel.cs" />
     <Compile Include="ViewModels\RegistrationViewModel.cs" />
     <Compile Include="ViewModels\SetSession.cs" />
@@ -422,6 +424,7 @@
     <Content Include="Views\Product\EditProduct.cshtml" />
     <Content Include="Views\Location\AddLocation.cshtml" />
     <Content Include="Views\CategorySubcategory\AddCategorySubcategory.cshtml" />
+    <Content Include="Views\ProductVarient\AddProductVarient.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

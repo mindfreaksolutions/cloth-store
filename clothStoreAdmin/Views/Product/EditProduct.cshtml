@@ -118,7 +118,7 @@
                 </div>
                 <label class="control-label col-md-2" for="productQuantity">Quantity</label>
                 <div class="col-md-4">
-                    <input type="number" id="productQuantity" class="form-control" placeholder="Product Quantity">
+                    <input type="number" min="1" value="1" id="productQuantity" class="form-control" placeholder="Product Quantity">
                 </div>
             </div>
             <div class="row form-box">
@@ -126,18 +126,13 @@
                 <div class="col-md-4">
                     <select class="form-control" id="productColor">
                         <option value="">---Select Color---</option>
-                        <option value="1">Red</option>
-                        <option value="2">Green</option>
+                        <option value="Red">Red</option>
+                        <option value="Green">Green</option>
                     </select>
                 </div>
                 <label class="control-label col-md-2" for="productSize">Size</label>
                 <div class="col-md-4">
                     <select class="form-control" id="productSize">
-                        <option value="">---Select Size---</option>
-                        <option value="1">Small</option>
-                        <option value="2">Medium</option>
-                        <option value="3">Large</option>
-                        <option value="4">Extra Large</option>
                     </select>
                 </div>
             </div>
@@ -221,15 +216,36 @@
 
         //To edit product varients on client side
         function editVarients(event) {
-            var edit_Color = "<select class='form-control editColor'><option value=''>---Select Color---</option><option value='1'>Red</option><option value='2'>Green</option></select>";
-            var edit_Size = "<select class='form-control editSize'><option value=''>---Select Size---</option><option value='1'>Small</option><option value='2'>Medium</option><option value='3'>Large</option><option value='4'>Extra Large</option></select>";
-
             var edit_Varients = $(event).parent().parent();
             edit_Varients.find(".editVarients").hide();
             edit_Varients.find(".saveVarients").show();
             var edit_Array = edit_Varients.children("td");
+            var edit_Color = "<select class='form-control editColor'>";
+            $("#productColor option").each(function () {
+                if ($(edit_Array[2]).text() == $(this).val()) {
+                    edit_Color = edit_Color + "<option value='" + $(this).val() + "' selected>" + $(this).text() + "</option>";
+                }
+                else {
+                    edit_Color = edit_Color + "<option value='" + $(this).val() + "'>" + $(this).text() + "</option>";
+                }
+            });
+            edit_Color = edit_Color + "</select>";
+
+            var edit_Size = "<select class='form-control editSize'>";
+            $("#productSize option").each(function () {
+                if ($(edit_Array[3]).text() == $(this).val())
+                {
+                    edit_Size = edit_Size + "<option value='" + $(this).val() + "' selected>" + $(this).text() + "</option>";
+                }
+                else
+                {
+                    edit_Size = edit_Size + "<option value='" + $(this).val() + "'>" + $(this).text() + "</option>";
+                }
+            });
+            edit_Size = edit_Size + "</select>";
+
             $(edit_Array[0]).html("<input type='text' class='form-control editPrice' value='" + $(edit_Array[0]).text() + "'></input>");
-            $(edit_Array[1]).html("<input type='text' class='form-control editQuantity' value='" + $(edit_Array[1]).text() + "'></input>");
+            $(edit_Array[1]).html("<input type='number' min='1' class='form-control editQuantity' value='" + $(edit_Array[1]).text() + "'></input>");
             $(edit_Array[2]).html(edit_Color);
             $(edit_Array[3]).html(edit_Size);
         }
@@ -313,6 +329,23 @@
                             $("#productCategory").append("<option class=form-control value='" + response.category[i].Key + "'>" + response.category[i].Object.categoryName + "</option>");
                         }
                         $("#productSubCategory").append("<option value=''>----Select Subcategory----</option>");
+                    }
+                },
+                error: function () {
+                }
+            });
+
+            //Sizes Load
+            $.ajax({
+                type: "GET",
+                url: "/ProductVarient/LoadProductSize",
+                dataType: "json",
+                success: function (response) {
+                    $("#productSize").append("<option value=''>----Select Size----</option>");
+                    if (response.status) {
+                        for (var i = 0; i < response.size.length; i++) {
+                            $("#productSize").append("<option class=form-control value='" + response.size[i].Object.sizeName + "'>" + response.size[i].Object.sizeName + "</option>");
+                        }
                     }
                 },
                 error: function () {

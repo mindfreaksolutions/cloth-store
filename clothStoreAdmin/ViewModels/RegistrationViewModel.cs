@@ -57,6 +57,4 @@ namespace clothStoreAdmin.ViewModels
         public DateTime updatedon { get; set; }
         public string uploadProfile { get; set; }
     }
-
-
 }

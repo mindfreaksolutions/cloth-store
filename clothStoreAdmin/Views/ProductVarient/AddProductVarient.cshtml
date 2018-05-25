@@ -1,0 +1,171 @@
+﻿
+@{
+    ViewBag.Title = "AddProductVarient";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloth Store Admin</title>
+    <style>
+        .legendsection {
+            font: normal 20px 'Bitter', serif;
+            color: #2A88AD;
+            margin-bottom: 5px;
+        }
+
+            .legendsection span {
+                background: #2A88AD;
+                padding: 5px 10px 5px 10px;
+                position: relative;
+                border-radius: 50%;
+                -webkit-border-radius: 50%;
+                -moz-border-radius: 50%;
+                border: 4px solid #fff;
+                font-size: 14px;
+                margin-left: 0px;
+                color: #fff;
+                margin-top: -3px;
+            }
+
+        .inner-wrap {
+            padding: 30px;
+            background: #F8F8F8;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            padding-bottom: 0.1px;
+            padding-top: 10px;
+        }
+
+        .required:after {
+            content: " *";
+            color: red;
+        }
+
+        .tab-content {
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    @if (ViewData.ModelState.Any(x => x.Value.Errors.Any()))
+    {
+        <div class="alert alert-danger col-md-12">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <strong>@Html.ValidationMessage("error", new { @class = "col-md-2" })</strong>
+        </div>
+        <div class="row">
+
+        </div>
+    }
+    @*   <form action="@Url.Action("AddProduct","Product")" method="post" id="productAdd" enctype="multipart/form-data" class="form-horizontal form-box gi-classic_hammer">*@
+    <h4 class="form-box-header"><i class="fa fa-circle-o"></i> ADD Category/Subcategory</h4>
+    <br />
+    <ul class="nav nav-pills">
+        @*<li class="active"><a data-toggle="pill" href="#sizemenu">Add Size</a></li>*@
+        @*<li><a id="addColor" data-toggle="pill" href="#colormenu">Add Color</a></li>*@
+    </ul>
+    <div class="tab-content">
+        <!-- Form Content -->
+        <div id="sizemenu" class="inner-wrap tab-pane fade in active">
+            <div class="row form-box">
+                <label class="control-label col-md-2 required" for="sizeName">Size</label>
+                <div class="col-md-4">
+                    <input type="text" id="sizeName" name="sizeName" class="form-control" placeholder="Size">
+                </div>
+            </div>
+            <div class="form-group form-actions">
+                <div class="col-md-2 col-md-offset-4">
+                    <input type="button" class="btn btn-danger form-control" id="sizeReset" value="Reset">
+                </div>
+                <div class="col-md-2">
+                    <input type="button" class="btn btn-success form-control" id="sizeSubmit" value="Submit">
+                </div>
+            </div>
+        </div>
+        @*<div id="colormenu" class="inner-wrap tab-pane fade">
+                <div class="row form-box">
+                    <label class="control-label col-md-2 required" for="colorName">Color</label>
+                    <div class="col-md-4">
+                        <input type="text" id="colorName" name="colorName" class="form-control" placeholder="Color">
+                    </div>
+                </div>
+                <div class="form-group form-actions">
+                    <div class="col-md-2 col-md-offset-4">
+                        <input type="button" class="btn btn-danger form-control" id="colorReset" value="Reset">
+                    </div>
+                    <div class="col-md-2">
+                        <input type="button" class="btn btn-success form-control" id="colorSubmit" value="Submit">
+                    </div>
+                </div>
+            </div>*@
+    </div>
+    <!-- END First Step -->
+    <!-- Form Buttons -->
+    <!-- END Form Buttons -->
+    <!-- END Form Content -->
+    @*</form>*@
+    <!-- END Basic Form Wizard -->
+</body>
+</html>
+@section scripts {
+    <script>
+        //Product Size
+        $("#sizeSubmit").on("click", function () {
+            var size_Name = $("#sizeName");
+            if (size_Name.val() == "") {
+                alert("Size Name Must Be Enter");
+                return false;
+            }
+            $.ajax({
+                type: "POST",
+                url: "/ProductVarient/AddProductSize",
+                data: { sizeName: size_Name.val() },
+                dataType: "json",
+                success: function (response) {
+                    alert(response.data);
+                    if (response.status) {
+                        size_Name.val("");
+                    }
+                },
+                error: function () {
+                    alert("Something went wrong");
+                }
+            });
+        });
+        $("#sizeReset").on("click", function () {
+            $("#sizeName").val("");
+        });
+
+        //Product COlor
+        //$("#colorSubmit").on("click", function () {
+        //    var color_Name = $("#colorName");
+        //    if (color_Name.val() == "") {
+        //        alert("Color Name Must Be Enter");
+        //        return false;
+        //    }
+        //    $.ajax({
+        //        type: "POST",
+        //        url: "/ProductVarient/AddProductColor",
+        //        data: { colorName: color_Name.val() },
+        //        dataType: "json",
+        //        success: function (response) {
+        //            alert(response.data);
+        //            if (response.status) {
+        //                color_Name.val("");
+        //            }
+        //        },
+        //        error: function () {
+        //            alert("Something went wrong");
+        //        }
+        //    });
+        //});
+        //$("#colorReset").on("click", function () {
+        //    $("#colorName").val("");
+        //});
+    </script>
+}
