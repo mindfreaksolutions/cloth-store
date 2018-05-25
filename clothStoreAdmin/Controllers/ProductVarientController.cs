@@ -39,6 +39,7 @@ namespace clothStoreAdmin.Controllers
                         return Json(new { data = data, status = status }, JsonRequestBehavior.AllowGet);
                     }
                 }
+
                 cpvvm.sizeName = cpvvm.sizeName.ToUpper().Trim();
                 var sizeAdded = await firebase.Child("size").PostAsync(cpvvm, true);
                 data = "Product Size Added Successfully !";
