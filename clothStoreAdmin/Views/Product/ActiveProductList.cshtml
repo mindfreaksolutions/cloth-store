@@ -32,7 +32,7 @@
                 <th>Description</th>
                 <th>Status</th>
                 <th>Edit</th>
-                <th>Delete</th>
+                @*<th>Delete</th>*@
             </tr>
         </thead>
     </table>
@@ -44,7 +44,7 @@
     <script>
         /* Initialize Datatables */
         $("#productActiveList").dataTable({
-            columnDefs: [{ orderable: false, targets: [1], visible: false }],
+            columnDefs: [{ orderable: false, targets: [0], visible: false }],
             scrollY: "500px",
             scrollCollapse: true,
             processing: false,
@@ -58,21 +58,22 @@
             columns: [
                     { data: "productId", name: "productId", autoWidth: true },
                     { data: "productTitle", name: "productTitle", autoWidth: true },
-                    { data: "productCategory", name: "productCategory", autoWidth: true },
-                    { data: "productSubCategory", name: "productSubCategory", autoWidth: true },
+                    { data: "productCategoryName", name: "productCategoryName", autoWidth: true },
+                    { data: "productSubCategoryName", name: "productSubCategoryName", autoWidth: true },
                     { data: "productDescription", name: "productDescription", autoWidth: true },
                     { data: "productActive", name: "productActive", autoWidth: true },
                     {
                         data: null,
                         render: function (data, type, full, meta) {
-                            return '<a class="fa fa-edit" href="/Product/EditProduct?productId=' + full.productId + '&productStatus=Active"></a>';
+                            var action = '<a class="fa fa-edit" href="/Product/EditProduct?productId=' + full.productId + '&productStatus=Active"></a>&nbsp&nbsp<a class="fa fa-remove" href="/Product/ActiveInactiveProduct?productId=' + full.productId + '&productStatus=Inactive"></a>';
+                            return action;
                         }
                     },
-                    {
-                        data: null, render: function (data, type, row) {
-                            return "<a class='fa fa-remove' href='/Product/ActiveInactiveProduct?productId=" + row.productId + "&productStatus=Inactive'></a>";
-                        }
-                    },
+                    //{
+                    //    data: null, render: function (data, type, row) {
+                    //        return "<a class='fa fa-remove' href='/Product/ActiveInactiveProduct?productId=" + row.productId + "&productStatus=Inactive'></a>";
+                    //    }
+                    //},
             ]
         });
         $(".dataTables_filter input").attr('placeholder', 'Search');

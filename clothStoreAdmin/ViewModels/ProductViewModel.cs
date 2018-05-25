@@ -54,8 +54,8 @@ namespace clothStoreAdmin.ViewModels
     {
         public string userId { get; set; }
         public string productId { get; set; }
-        public string productCategory { get; set; }
-        public string productSubCategory { get; set; }
+        public string productCategoryName { get; set; }
+        public string productSubCategoryName { get; set; }
         public string productTitle { get; set; }
         public string productDescription { get; set; }
         public bool productActive { get; set; }
