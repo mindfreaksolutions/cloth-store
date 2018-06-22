@@ -8,6 +8,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cloth Store Admin</title>
     <style>
+         .required:after {
+            content: " *";
+            color: red;
+        }
     </style>
 </head>
 <body>
@@ -31,50 +35,50 @@
         <!-- Form Content -->
         <div class="form-box-content">
             <div class="form-group">
-                <label class="control-label col-md-2" for="contactNo">Mobile No *</label>
+                <label class="control-label col-md-2 required" for="contactNo">Mobile No</label>
                 <div class="col-md-4">
                     <input type="text" name="contactNo" value="" maxlength="10" class="form-control" placeholder="Mobile Number without contry code" required>
                 </div>
-                <label class="control-label col-md-2" for="emailId">Email *</label>
+                <label class="control-label col-md-2 required" for="emailId">Email</label>
                 <div class="col-md-4">
                     <input type="email" id="emailId" name="emailId" value="" class="form-control" placeholder="Email">
                 </div>
             </div>
             <div class="form-group">
-                <label class="control-label col-md-2" for="password">Password *</label>
+                <label class="control-label col-md-2 required" for="password">Password</label>
                 <div class="col-md-4">
-                    <input type="password" id="password" name="password" value="" class="form-control" minle="" placeholder="Password">
+                    <input type="password" id="password" name="password" value="" class="form-control" placeholder="Password">
                 </div>
-                <label class="control-label col-md-2" for="confirmPassword">Retype Password *</label>
+                <label class="control-label col-md-2 required" for="confirmPassword">Retype Password</label>
                 <div class="col-md-4">
                     <input type="password" id="confirmPassword" name="confirmPassword" value="" class="form-control" placeholder="Retype Password">
                 </div>
             </div>
             <!--END Step Info-->
             <div class="form-group">
-                <label class="control-label col-md-2" for="firstName">First Name *</label>
+                <label class="control-label col-md-2 required" for="firstName">First Name</label>
                 <div class="col-md-4">
                     <input type="text" id="firstName" value="" name="firstName" class="form-control" placeholder="First Name" required>
                 </div>
-                <label class="control-label col-md-2" for="lastName">Last Name *</label>
+                <label class="control-label col-md-2 required" for="lastName">Last Name</label>
                 <div class="col-md-4">
                     <input type="text" id="lastName" value="" name="lastName" class="form-control" placeholder="Last Name" required>
                 </div>
             </div>
             <div class="form-group">
-                <label class="control-label col-md-2" for="address">Address *</label>
+                <label class="control-label col-md-2 required" for="address">Address</label>
                 <div class="col-md-10">
                     <input type="text" id="address" value="" name="address" class="form-control" placeholder="Address" required>
                 </div>
             </div>
             <div class="form-group">
-                <label class="control-label col-md-2" for="state">State *</label>
+                <label class="control-label col-md-2 required" for="state">State</label>
                 <div class="col-md-4">
                     <select class="form-control" id="state" name="state" required>
                     </select>
                     <input type="hidden" id="stateName" name="stateName" />
                 </div>
-                <label class="control-label col-md-2" for="city">City *</label>
+                <label class="control-label col-md-2 required" for="city">City</label>
                 <div class="col-md-4">
                     <select class="form-control" id="city" name="city" required>
                     </select>
@@ -83,8 +87,14 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2">Profile Image</label>
-                <div class="col-md-10">
-                    <input type="file" id="uploadProfile" name="uploadProfile" />
+                <div class="col-md-4">
+                    <input type="file" id="uploadProfile" name="uploadProfile" onchange="onImageChange(this)"/>
+                    <div id="uploadProfilePreview" class="pull-left" hidden>
+                        <span class="fa fa-remove pull-left" title="Remove Image" style="color:red" id="uploadProfileRemove" onclick="ImageRemove(this)" hidden></span>
+                        <div>
+                            <img src="~/Images/preview.png" height="150px" width="150px" id="uploadProfileShow" />
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- Form Buttons -->
