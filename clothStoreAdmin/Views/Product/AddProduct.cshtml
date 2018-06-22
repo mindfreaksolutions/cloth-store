@@ -115,16 +115,16 @@
             <div class="row form-box">
                 <label class="control-label col-md-2" for="productColor">Color</label>
                 <div class="col-md-4">
-                    <select class="form-control" id="productColor">
-                        <option value="">---Select Color---</option>
-                        <option value="Red">Red</option>
-                        <option value="Green">Green</option>
-                    </select>
+                    <input type="color" value="" id="productColor" />
+                    @*<select class="form-control" id="productColor">
+                            <option value="">---Select Color---</option>
+                            <option value="Red">Red</option>
+                            <option value="Green">Green</option>
+                        </select>*@
                 </div>
                 <label class="control-label col-md-2" for="productSize">Size</label>
                 <div class="col-md-4">
-                    <select class="form-control" id="productSize">
-                    </select>
+                    <select class="form-control" id="productSize"></select>
                 </div>
             </div>
             <div class="row">
@@ -152,23 +152,47 @@
         <!-- Fourth Step -->
         <div class="inner-wrap">
             <div class="row form-box">
-                <label class="control-label col-md-2" for="imageUploadFirst">Product First Image</label>
+                <label class="control-label col-md-2">Product First Image</label>
                 <div class="col-md-4">
-                    <input type="file" id="imageUploadFirst" name="imageUploadFirst" />
+                    <input type="file" id="imageUploadFirst" name="imageUploadFirst" onchange="onImageChange(this)" />
+                    <div id="imageUploadFirstPreview" hidden>
+                        <span class="fa fa-remove" title="Remove Image" style="color:red" id="imageUploadFirstRemove" onclick="ImageRemove(this)" hidden></span>
+                        <div>
+                            <img src="~/Images/preview.png" height="150px" width="150px" id="imageUploadFirstShow" />
+                        </div>
+                    </div>
                 </div>
-                <label class="control-label col-md-2" for="imageUploadSecond">Product Second Image</label>
+                <label class="control-label col-md-2">Product Second Image</label>
                 <div class="col-md-4">
-                    <input type="file" id="imageUploadSecond" name="imageUploadSecond" />
+                    <input type="file" id="imageUploadSecond" name="imageUploadSecond" onchange="onImageChange(this)" />
+                    <div id="imageUploadSecondPreview" hidden>
+                        <span class="fa fa-remove" title="Remove Image" style="color:red" id="imageUploadSecondRemove" onclick="ImageRemove(this)" hidden></span>
+                        <div>
+                            <img src="~/Images/preview.png" height="150px" width="150px" id="imageUploadSecondShow" />
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="row form-box">
-                <label class="control-label col-md-2" for="imageUploadThird">Product Third Image</label>
+                <label class="control-label col-md-2">Product Third Image</label>
                 <div class="col-md-4">
-                    <input type="file" id="imageUploadThird" name="imageUploadThird" />
+                    <input type="file" id="imageUploadThird" name="imageUploadThird" onchange="onImageChange(this)" />
+                    <div id="imageUploadThirdPreview" hidden>
+                        <span class="fa fa-remove" title="Remove Image" style="color:red" id="imageUploadThirdRemove" onclick="ImageRemove(this)" hidden></span>
+                        <div>
+                            <img src="~/Images/preview.png" height="150px" width="150px" id="imageUploadThirdShow" />
+                        </div>
+                    </div>
                 </div>
-                <label class="control-label col-md-2" for="imageUploadFourth">Product Fourth Image</label>
+                <label class="control-label col-md-2">Product Fourth Image</label>
                 <div class="col-md-4">
-                    <input type="file" id="imageUploadFourth" name="imageUploadFourth" />
+                    <input type="file" id="imageUploadFourth" name="imageUploadFourth" onchange="onImageChange(this)" />
+                    <div id="imageUploadFourthPreview" hidden>
+                        <span class="fa fa-remove" title="Remove Image" style="color:red" id="imageUploadFourthRemove" onclick="ImageRemove(this)" hidden></span>
+                        <div>
+                            <img src="~/Images/preview.png" height="150px" width="150px" id="imageUploadFourthShow" />
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -190,6 +214,7 @@
 </html>
 
 @section scripts {
+    <script type="text/javascript" src="http://chir.ag/projects/ntc/ntc.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             //Category Load
@@ -262,9 +287,9 @@
 
             var product_Price = $("#productPrice");
             var product_Quantity = $("#productQuantity");
-            var product_Color = $("#productColor option:selected");
+            //var product_Color = $("#productColor option:selected");
+            var product_Color = $("#productColor");
             var product_Size = $("#productSize option:selected");
-
             if (product_Price.val() == "") {
                 alert("Price Must Be Enter");
                 return false;
@@ -281,7 +306,7 @@
                 alert("Size Must Be Select");
                 return false;
             }
-            var row = "<tr><td>" + product_Price.val() + "</td><td>" + product_Quantity.val() + "</td><td>" + product_Color.text() + "</td><td>" + product_Size.text() + "<td class='col-md-2'><i class='fa fa-save saveVarients' onclick='saveVarients(this)' style='display:none;'></i>&nbsp;&nbsp;<i class='fa fa-edit editVarients' onclick='editVarients(this)'></i>&nbsp;&nbsp;<i class='fa fa-trash' onclick='removeVarients(this)'></i></td></tr>";
+            var row = "<tr><td>" + product_Price.val() + "</td><td>" + product_Quantity.val() + "</td><td>" + getColor(product_Color.val()) + "</td><td>" + product_Size.text() + "<td class='col-md-2'><i class='fa fa-save saveVarients' onclick='saveVarients(this)' style='display:none;'></i>&nbsp;&nbsp;<i class='fa fa-edit editVarients' onclick='editVarients(this)'></i>&nbsp;&nbsp;<i class='fa fa-trash' onclick='removeVarients(this)'></i></td></tr>";
             $("#prodVarients").append(row);
 
             product_Price.val("");
@@ -301,17 +326,18 @@
             edit_Varients.find(".editVarients").hide();
             edit_Varients.find(".saveVarients").show();
             var edit_Array = edit_Varients.children("td");
+            var edit_Color = "<input type=color value='' class='form-control editColor'>";
 
-            var edit_Color = "<select class='form-control editColor'>";
-            $("#productColor option").each(function () {
-                if ($(edit_Array[2]).text() == $(this).val()) {
-                    edit_Color = edit_Color + "<option value='" + $(this).val() + "' selected>" + $(this).text() + "</option>";
-                }
-                else {
-                    edit_Color = edit_Color + "<option value='" + $(this).val() + "'>" + $(this).text() + "</option>";
-                }
-            });
-            edit_Color = edit_Color + "</select>";
+            //var edit_Color = "<select class='form-control editColor'>";
+            //$("#productColor option").each(function () {
+            //    if ($(edit_Array[2]).text() == $(this).val()) {
+            //        edit_Color = edit_Color + "<option value='" + $(this).val() + "' selected>" + $(this).text() + "</option>";
+            //    }
+            //    else {
+            //        edit_Color = edit_Color + "<option value='" + $(this).val() + "'>" + $(this).text() + "</option>";
+            //    }
+            //});
+            //edit_Color = edit_Color + "</select>";
 
             var edit_Size = "<select class='form-control editSize'>";
             $("#productSize option").each(function () {
@@ -323,7 +349,7 @@
                 }
             });
             edit_Size = edit_Size + "</select>";
-           
+
             $(edit_Array[0]).html("<input type='text' class='form-control editPrice' value='" + $(edit_Array[0]).text() + "'></input>");
             $(edit_Array[1]).html("<input type='number' class='form-control editQuantity' value='" + $(edit_Array[1]).text() + "'></input>");
             $(edit_Array[2]).html(edit_Color);
@@ -335,7 +361,8 @@
             var save_Varients = $(event).parent().parent();
             var save_Price = save_Varients.find(".editPrice");
             var save_Quantity = save_Varients.find(".editQuantity");
-            var save_Color = save_Varients.find(".editColor option:selected");
+            //var save_Color = save_Varients.find(".editColor option:selected");
+            var save_Color = save_Varients.find(".editColor");
             var save_Size = save_Varients.find(".editSize option:selected");
 
             if (save_Price.val() == "") {
@@ -382,6 +409,16 @@
                 $("#productAdd").prepend("<input type='hidden' name='prodVarients[" + i + "].productSize' value='" + prod_Size + "'></input>");
             }
         });
+    </script>
+
+    <script type="text/javascript">
+        function getColor(colorCode) {
+            var n_match = ntc.name(colorCode);
+            n_rgb = n_match[0]; // RGB value of closest match
+            n_name = n_match[1]; // Text string: Color name
+            n_exactmatch = n_match[2]; // True if exact color match
+            return n_name;
+        }
     </script>
 }
 

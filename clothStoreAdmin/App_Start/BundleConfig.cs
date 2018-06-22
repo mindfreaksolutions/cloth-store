@@ -24,7 +24,8 @@ namespace clothStoreAdmin
                        "~/Scripts/adminModernizr-respond.min.js",
                        "~/Scripts/adminBootstrap.min.js",
                        "~/Scripts/adminPlugins.js",
-                       "~/Scripts/adminMain.js"));
+                       "~/Scripts/adminMain.js",
+                       "~/WebScripts/customValidation.js"));
             bundles.Add(new StyleBundle("~/Content/adminCss").Include(
                       "~/Content/adminBootstrap.css",
                       "~/Content/adminPlugins.css",

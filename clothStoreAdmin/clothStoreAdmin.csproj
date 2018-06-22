@@ -386,6 +386,7 @@
     <Content Include="fonts\Simple-Line-Icons.eot" />
     <Content Include="fonts\Simple-Line-Icons.ttf" />
     <Content Include="fonts\Simple-Line-Icons.woff" />
+    <Content Include="WebScripts\customValidation.js" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
