@@ -49,6 +49,7 @@ namespace clothStoreAdmin.ViewModels
         public int productQuantity { get; set; }
         public string productColor { get; set; }
         public string productSize { get; set; }
+        public string productColorCode { get; set; }
     }
     public class GetListProductViewModel
     {

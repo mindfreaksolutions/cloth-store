@@ -156,7 +156,7 @@
                 <div class="col-md-4">
                     <input type="file" id="imageUploadFirst" name="imageUploadFirst" onchange="onImageChange(this)" />
                     <div id="imageUploadFirstPreview" hidden>
-                        <span class="fa fa-remove" title="Remove Image" style="color:red" id="imageUploadFirstRemove" onclick="ImageRemove(this)" hidden></span>
+                        <span class="fa fa-remove" title="Remove Image" style="color:red" id="imageUploadFirstRemove" onclick="ImageRemove(this,'create')" hidden></span>
                         <div>
                             <img src="~/Images/preview.png" height="150px" width="150px" id="imageUploadFirstShow" />
                         </div>
@@ -166,7 +166,7 @@
                 <div class="col-md-4">
                     <input type="file" id="imageUploadSecond" name="imageUploadSecond" onchange="onImageChange(this)" />
                     <div id="imageUploadSecondPreview" hidden>
-                        <span class="fa fa-remove" title="Remove Image" style="color:red" id="imageUploadSecondRemove" onclick="ImageRemove(this)" hidden></span>
+                        <span class="fa fa-remove" title="Remove Image" style="color:red" id="imageUploadSecondRemove" onclick="ImageRemove(this, 'create')" hidden></span>
                         <div>
                             <img src="~/Images/preview.png" height="150px" width="150px" id="imageUploadSecondShow" />
                         </div>
@@ -178,7 +178,7 @@
                 <div class="col-md-4">
                     <input type="file" id="imageUploadThird" name="imageUploadThird" onchange="onImageChange(this)" />
                     <div id="imageUploadThirdPreview" hidden>
-                        <span class="fa fa-remove" title="Remove Image" style="color:red" id="imageUploadThirdRemove" onclick="ImageRemove(this)" hidden></span>
+                        <span class="fa fa-remove" title="Remove Image" style="color:red" id="imageUploadThirdRemove" onclick="ImageRemove(this, 'create')" hidden></span>
                         <div>
                             <img src="~/Images/preview.png" height="150px" width="150px" id="imageUploadThirdShow" />
                         </div>
@@ -188,7 +188,7 @@
                 <div class="col-md-4">
                     <input type="file" id="imageUploadFourth" name="imageUploadFourth" onchange="onImageChange(this)" />
                     <div id="imageUploadFourthPreview" hidden>
-                        <span class="fa fa-remove" title="Remove Image" style="color:red" id="imageUploadFourthRemove" onclick="ImageRemove(this)" hidden></span>
+                        <span class="fa fa-remove" title="Remove Image" style="color:red" id="imageUploadFourthRemove" onclick="ImageRemove(this, 'create')" hidden></span>
                         <div>
                             <img src="~/Images/preview.png" height="150px" width="150px" id="imageUploadFourthShow" />
                         </div>
@@ -302,11 +302,21 @@
                 alert("Color Must Be Select");
                 return false;
             }
-            if (product_Size.val() == "") {
+            if (product_Size.val() == "" || product_Size.val() == undefined) {
                 alert("Size Must Be Select");
                 return false;
             }
-            var row = "<tr><td>" + product_Price.val() + "</td><td>" + product_Quantity.val() + "</td><td>" + getColor(product_Color.val()) + "</td><td>" + product_Size.text() + "<td class='col-md-2'><i class='fa fa-save saveVarients' onclick='saveVarients(this)' style='display:none;'></i>&nbsp;&nbsp;<i class='fa fa-edit editVarients' onclick='editVarients(this)'></i>&nbsp;&nbsp;<i class='fa fa-trash' onclick='removeVarients(this)'></i></td></tr>";
+            var product_ColorName = getColor(product_Color.val());
+            var productDuplicate = $("#prodVarients > tr").each(function (i, element) { });
+            for (var i = 0; i < productDuplicate.length; i++) {
+                var prod_ExistColor = productDuplicate[i].children[2].innerText;
+                var prod_ExistSize = productDuplicate[i].children[3].innerText;
+                if (prod_ExistColor == product_ColorName && prod_ExistSize == product_Size.text()) {
+                    alert("You have already added below !");
+                    return false;
+                }
+            }
+            var row = "<tr><td>" + product_Price.val() + "</td><td>" + product_Quantity.val() + "</td><td>" + product_ColorName + "</td><td>" + product_Size.text() + "</td><td hidden>" + product_Color.val() + "</td><td class='col-md-2'><i class='fa fa-save saveVarients' onclick='saveVarients(this)' style='display:none;'></i>&nbsp;&nbsp;<i class='fa fa-edit editVarients' onclick='editVarients(this)'></i>&nbsp;&nbsp;<i class='fa fa-trash' onclick='removeVarients(this)'></i></td></tr>";
             $("#prodVarients").append(row);
 
             product_Price.val("");
@@ -326,7 +336,7 @@
             edit_Varients.find(".editVarients").hide();
             edit_Varients.find(".saveVarients").show();
             var edit_Array = edit_Varients.children("td");
-            var edit_Color = "<input type=color value='' class='form-control editColor'>";
+            var edit_Color = "<input type=color value=" + $(edit_Array[4]).text() + " class='form-control editColor'>";
 
             //var edit_Color = "<select class='form-control editColor'>";
             //$("#productColor option").each(function () {
@@ -385,14 +395,19 @@
             var save_Array = save_Varients.children("td");
             $(save_Array[0]).text(save_Price.val());
             $(save_Array[1]).text(save_Quantity.val());
-            $(save_Array[2]).text(save_Color.text());
+            $(save_Array[2]).text(getColor(save_Color.val()));
             $(save_Array[3]).text(save_Size.text());
-
+            $(save_Array[4]).text(save_Color.val());
             save_Varients.find(".editVarients").show();
             save_Varients.find(".saveVarients").hide();
         }
 
         $("#submit").on("click", function () {
+            var varientsEdit = $("#prodVarients").find(".editPrice");
+            if (varientsEdit.length > 0) {
+                alert("Save Edit Data First !");
+                return false;
+            }
             var s = $("#prodVarients > tr").each(function (i, element) { });
             if (s.length <= 0) {
                 alert("At Least One Product Price, Quantity, Color and Size Must Be Define !");
@@ -403,22 +418,14 @@
                 var prod_Quantity = s[i].children[1].innerText;
                 var prod_Color = s[i].children[2].innerText;
                 var prod_Size = s[i].children[3].innerText;
+                var prod_ColorCode = s[i].children[4].innerText;
                 $("#productAdd").prepend("<input type='hidden' name='prodVarients[" + i + "].productPrice' value='" + prod_Price + "'></input>");
                 $("#productAdd").prepend("<input type='hidden' name='prodVarients[" + i + "].productQuantity' value='" + prod_Quantity + "'></input>");
                 $("#productAdd").prepend("<input type='hidden' name='prodVarients[" + i + "].productColor' value='" + prod_Color + "'></input>");
                 $("#productAdd").prepend("<input type='hidden' name='prodVarients[" + i + "].productSize' value='" + prod_Size + "'></input>");
+                $("#productAdd").prepend("<input type='hidden' name='prodVarients[" + i + "].productColorCode' value='" + prod_ColorCode + "'></input>");
             }
         });
-    </script>
-
-    <script type="text/javascript">
-        function getColor(colorCode) {
-            var n_match = ntc.name(colorCode);
-            n_rgb = n_match[0]; // RGB value of closest match
-            n_name = n_match[1]; // Text string: Color name
-            n_exactmatch = n_match[2]; // True if exact color match
-            return n_name;
-        }
     </script>
 }
 

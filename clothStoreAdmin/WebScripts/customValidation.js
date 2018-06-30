@@ -60,11 +60,26 @@ function ImageReset(eve) {
 }
 
 // Image Remove
-function ImageRemove(eve)
-{
+function ImageRemove(eve, action) {
     $("#" + $(eve).attr("id")).hide();
     var id = $(eve).attr("id").replace("Remove", "");
     $("#" + id).val("");
     $("#" + id + "Preview").hide();
     $("#" + id + "Show").attr("src", "");
+    //Swith is used for to delete existing image on edit action
+    switch (action) {
+        case "edit": var imageName = $("#" + id + "Name").val();
+            if (imageName != "") { $("#" + id + "Name").val(imageName + "," + "remove") }
+            break;
+        default: break;
+    }
+}
+
+//Color Validation
+function getColor(colorCode) {
+    var n_match = ntc.name(colorCode);
+    n_rgb = n_match[0]; // RGB value of closest match
+    n_name = n_match[1]; // Text string: Color name
+    n_exactmatch = n_match[2]; // True if exact color match
+    return n_name;
 }

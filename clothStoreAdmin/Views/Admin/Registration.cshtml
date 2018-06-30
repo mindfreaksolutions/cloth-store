@@ -90,7 +90,7 @@
                 <div class="col-md-4">
                     <input type="file" id="uploadProfile" name="uploadProfile" onchange="onImageChange(this)"/>
                     <div id="uploadProfilePreview" class="pull-left" hidden>
-                        <span class="fa fa-remove pull-left" title="Remove Image" style="color:red" id="uploadProfileRemove" onclick="ImageRemove(this)" hidden></span>
+                        <span class="fa fa-remove pull-left" title="Remove Image" style="color:red" id="uploadProfileRemove" onclick="ImageRemove(this, 'create')" hidden></span>
                         <div>
                             <img src="~/Images/preview.png" height="150px" width="150px" id="uploadProfileShow" />
                         </div>

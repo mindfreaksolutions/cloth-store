@@ -69,14 +69,12 @@
             <div class="row form-box">
                 <label class="control-label col-md-2 required" for="productCategory">Category</label>
                 <div class="col-md-4">
-                    <select class="form-control" id="productCategory" name="productCategory" required>
-                    </select>
+                    <select class="form-control" id="productCategory" name="productCategory" required></select>
                     <input type="hidden" id="productCategoryName" name="productCategoryName" />
                 </div>
                 <label class="control-label col-md-2 required" for="productSubCategory">SubCategory</label>
                 <div class="col-md-4">
-                    <select class="form-control" id="productSubCategory" name="productSubCategory" required>
-                    </select>
+                    <select class="form-control" id="productSubCategory" name="productSubCategory" required></select>
                     <input type="hidden" id="productSubCategoryName" name="productSubCategoryName" />
                 </div>
             </div>
@@ -124,16 +122,11 @@
             <div class="row form-box">
                 <label class="control-label col-md-2" for="productColor">Color</label>
                 <div class="col-md-4">
-                    <select class="form-control" id="productColor">
-                        <option value="">---Select Color---</option>
-                        <option value="Red">Red</option>
-                        <option value="Green">Green</option>
-                    </select>
+                    <input type="color" value="" id="productColor" />
                 </div>
                 <label class="control-label col-md-2" for="productSize">Size</label>
                 <div class="col-md-4">
-                    <select class="form-control" id="productSize">
-                    </select>
+                    <select class="form-control" id="productSize"></select>
                 </div>
             </div>
         </div>
@@ -157,6 +150,59 @@
             </table>
         </div>
         <!-- END Third Step -->
+        <div class="legendsection"><span>4</span>Product Images</div>
+        <!-- Fourth Step -->
+        <div class="inner-wrap">
+            <div class="row form-box">
+                <label class="control-label col-md-2">Product First Image</label>
+                <div class="col-md-4">
+                    <input type="file" id="imageUploadFirst" name="imageUploadFirst" onchange="onImageChange(this)" />
+                    <input type="hidden" id="imageUploadFirstName" name="imageUploadFirstName" />
+                    <div id="imageUploadFirstPreview" hidden>
+                        <span class="fa fa-remove" title="Remove Image" style="color:red" id="imageUploadFirstRemove" onclick="ImageRemove(this, 'edit')" hidden></span>
+                        <div>
+                            <img src="~/Images/preview.png" height="150px" width="150px" id="imageUploadFirstShow" />
+                        </div>
+                    </div>
+                </div>
+                <label class="control-label col-md-2">Product Second Image</label>
+                <div class="col-md-4">
+                    <input type="file" id="imageUploadSecond" name="imageUploadSecond" onchange="onImageChange(this)" />
+                    <input type="hidden" id="imageUploadSecondName" name="imageUploadSecondName" />
+                    <div id="imageUploadSecondPreview" hidden>
+                        <span class="fa fa-remove" title="Remove Image" style="color:red" id="imageUploadSecondRemove" onclick="ImageRemove(this, 'edit')" hidden></span>
+                        <div>
+                            <img src="~/Images/preview.png" height="150px" width="150px" id="imageUploadSecondShow" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-box">
+                <label class="control-label col-md-2">Product Third Image</label>
+                <div class="col-md-4">
+                    <input type="file" id="imageUploadThird" name="imageUploadThird" onchange="onImageChange(this)" />
+                    <input type="hidden" id="imageUploadThirdName" name="imageUploadThirdName" />
+                    <div id="imageUploadThirdPreview" hidden>
+                        <span class="fa fa-remove" title="Remove Image" style="color:red" id="imageUploadThirdRemove" onclick="ImageRemove(this, 'edit')" hidden></span>
+                        <div>
+                            <img src="~/Images/preview.png" height="150px" width="150px" id="imageUploadThirdShow" />
+                        </div>
+                    </div>
+                </div>
+                <label class="control-label col-md-2">Product Fourth Image</label>
+                <div class="col-md-4">
+                    <input type="file" id="imageUploadFourth" name="imageUploadFourth" onchange="onImageChange(this)" />
+                    <input type="hidden" id="imageUploadFourthName" name="imageUploadFourthName" />
+                    <div id="imageUploadFourthPreview" hidden>
+                        <span class="fa fa-remove" title="Remove Image" style="color:red" id="imageUploadFourthRemove" onclick="ImageRemove(this, 'edit')" hidden></span>
+                        <div>
+                            <img src="~/Images/preview.png" height="150px" width="150px" id="imageUploadFourthShow" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END Fourth Step -->
         <!-- Form Buttons -->
         <div class="form-group form-actions">
             <div class="col-md-2 col-md-offset-4">
@@ -173,6 +219,7 @@
 </body>
 </html>
 
+<script type="text/javascript" src="http://chir.ag/projects/ntc/ntc.js"></script>
 @section scripts {
     <script type="text/javascript">
 
@@ -181,7 +228,8 @@
 
             var product_Price = $("#productPrice");
             var product_Quantity = $("#productQuantity");
-            var product_Color = $("#productColor option:selected");
+            //var product_Color = $("#productColor option:selected");
+            var product_Color = $("#productColor");
             var product_Size = $("#productSize option:selected");
 
             if (product_Price.val() == "") {
@@ -200,7 +248,19 @@
                 alert("Size Must Be Select");
                 return false;
             }
-            var row = "<tr><td>" + product_Price.val() + "</td><td>" + product_Quantity.val() + "</td><td>" + product_Color.text() + "</td><td>" + product_Size.text() + "<td class='col-md-2'><i class='fa fa-save saveVarients' onclick='saveVarients(this)' style='display:none;'></i>&nbsp;&nbsp;<i class='fa fa-edit editVarients' onclick='editVarients(this)'></i>&nbsp;&nbsp;<i class='fa fa-trash' onclick='removeVarients(this)'></i></td></tr>";
+
+            var product_ColorName = getColor(product_Color.val());
+            var productDuplicate = $("#prodVarients > tr").each(function (i, element) { });
+            for (var i = 0; i < productDuplicate.length; i++) {
+                var prod_ExistColor = productDuplicate[i].children[2].innerText;
+                var prod_ExistSize = productDuplicate[i].children[3].innerText;
+                if (prod_ExistColor == product_ColorName && prod_ExistSize == product_Size.text()) {
+                    alert("You have already added below !");
+                    return false;
+                }
+            }
+
+            var row = "<tr><td>" + product_Price.val() + "</td><td>" + product_Quantity.val() + "</td><td>" + product_ColorName + "</td><td>" + product_Size.text() + "</td><td hidden>" + product_Color.val() + "</td><td class='col-md-2'><i class='fa fa-save saveVarients' onclick='saveVarients(this)' style='display:none;'></i>&nbsp;&nbsp;<i class='fa fa-edit editVarients' onclick='editVarients(this)'></i>&nbsp;&nbsp;<i class='fa fa-trash' onclick='removeVarients(this)'></i></td></tr>";
             $("#prodVarients").append(row);
 
             product_Price.val("");
@@ -216,29 +276,29 @@
 
         //To edit product varients on client side
         function editVarients(event) {
+            debugger;
             var edit_Varients = $(event).parent().parent();
             edit_Varients.find(".editVarients").hide();
             edit_Varients.find(".saveVarients").show();
             var edit_Array = edit_Varients.children("td");
-            var edit_Color = "<select class='form-control editColor'>";
-            $("#productColor option").each(function () {
-                if ($(edit_Array[2]).text() == $(this).val()) {
-                    edit_Color = edit_Color + "<option value='" + $(this).val() + "' selected>" + $(this).text() + "</option>";
-                }
-                else {
-                    edit_Color = edit_Color + "<option value='" + $(this).val() + "'>" + $(this).text() + "</option>";
-                }
-            });
-            edit_Color = edit_Color + "</select>";
+            var edit_Color = "<input type=color value=" + $(edit_Array[4]).text() + " class='form-control editColor'>";
+            //var edit_Color = "<select class='form-control editColor'>";
+            //$("#productColor option").each(function () {
+            //    if ($(edit_Array[2]).text() == $(this).val()) {
+            //        edit_Color = edit_Color + "<option value='" + $(this).val() + "' selected>" + $(this).text() + "</option>";
+            //    }
+            //    else {
+            //        edit_Color = edit_Color + "<option value='" + $(this).val() + "'>" + $(this).text() + "</option>";
+            //    }
+            //});
+            //edit_Color = edit_Color + "</select>";
 
             var edit_Size = "<select class='form-control editSize'>";
             $("#productSize option").each(function () {
-                if ($(edit_Array[3]).text() == $(this).val())
-                {
+                if ($(edit_Array[3]).text() == $(this).val()) {
                     edit_Size = edit_Size + "<option value='" + $(this).val() + "' selected>" + $(this).text() + "</option>";
                 }
-                else
-                {
+                else {
                     edit_Size = edit_Size + "<option value='" + $(this).val() + "'>" + $(this).text() + "</option>";
                 }
             });
@@ -255,7 +315,8 @@
             var save_Varients = $(event).parent().parent();
             var save_Price = save_Varients.find(".editPrice");
             var save_Quantity = save_Varients.find(".editQuantity");
-            var save_Color = save_Varients.find(".editColor option:selected");
+            //var save_Color = save_Varients.find(".editColor option:selected");
+            var save_Color = save_Varients.find(".editColor");
             var save_Size = save_Varients.find(".editSize option:selected");
 
             if (save_Price.val() == "") {
@@ -278,14 +339,20 @@
             var save_Array = save_Varients.children("td");
             $(save_Array[0]).text(save_Price.val());
             $(save_Array[1]).text(save_Quantity.val());
-            $(save_Array[2]).text(save_Color.text());
+            $(save_Array[2]).text(getColor(save_Color.val()));
             $(save_Array[3]).text(save_Size.text());
-
+            $(save_Array[4]).text(save_Color.val());
             save_Varients.find(".editVarients").show();
             save_Varients.find(".saveVarients").hide();
         }
 
         $("#submit").on("click", function () {
+            var varientsEdit = $("#prodVarients").find(".editPrice");
+            if (varientsEdit.length > 0)
+            {
+                alert("Save Edit Data First !");
+                return false;
+            }
             var s = $("#prodVarients > tr").each(function (i, element) { });
             if (s.length <= 0) {
                 alert("At Least One Product Price, Quantity, Color and Size Must Be Define !");
@@ -296,10 +363,12 @@
                 var prod_Quantity = s[i].children[1].innerText;
                 var prod_Color = s[i].children[2].innerText;
                 var prod_Size = s[i].children[3].innerText;
+                var prod_ColorCode = s[i].children[4].innerText;
                 $("#productEdit").prepend("<input type='hidden' name='prodVarients[" + i + "].productPrice' value='" + prod_Price + "'></input>");
                 $("#productEdit").prepend("<input type='hidden' name='prodVarients[" + i + "].productQuantity' value='" + prod_Quantity + "'></input>");
                 $("#productEdit").prepend("<input type='hidden' name='prodVarients[" + i + "].productColor' value='" + prod_Color + "'></input>");
                 $("#productEdit").prepend("<input type='hidden' name='prodVarients[" + i + "].productSize' value='" + prod_Size + "'></input>");
+                $("#productEdit").prepend("<input type='hidden' name='prodVarients[" + i + "].productColorCode' value='" + prod_ColorCode + "'></input>");
             }
         });
 
@@ -368,10 +437,30 @@
                     var date = new Date(parseInt(result.productDetails.createdon.replace('/Date(', '')));
                     $("#createdon").val(date.toUTCString());
                     for (var i = 0; i < result.productDetails.prodVarients.length; i++) {
-                        var row = "<tr><td>" + result.productDetails.prodVarients[i].productPrice + "</td><td>" + result.productDetails.prodVarients[i].productQuantity + "</td><td>" + result.productDetails.prodVarients[i].productColor + "</td><td>" + result.productDetails.prodVarients[i].productSize + "<td class='col-md-2'><i class='fa fa-save saveVarients' onclick='saveVarients(this)' style='display:none;'></i>&nbsp;&nbsp;<i class='fa fa-edit editVarients' onclick='editVarients(this)'></i>&nbsp;&nbsp;<i class='fa fa-trash' onclick='removeVarients(this)'></i></td></tr>";
+                        var row = "<tr><td>" + result.productDetails.prodVarients[i].productPrice + "</td><td>" + result.productDetails.prodVarients[i].productQuantity + "</td><td>" + result.productDetails.prodVarients[i].productColor + "</td><td>" + result.productDetails.prodVarients[i].productSize + "</td><td hidden>" + result.productDetails.prodVarients[i].productColorCode + "</td><td class='col-md-2'><i class='fa fa-save saveVarients' onclick='saveVarients(this)' style='display:none;'></i>&nbsp;&nbsp;<i class='fa fa-edit editVarients' onclick='editVarients(this)'></i>&nbsp;&nbsp;<i class='fa fa-trash' onclick='removeVarients(this)'></i></td></tr>";
                         $("#prodVarients").append(row);
                     }
                     $("#userId").val(result.productDetails.userId);
+                    if (result.productDetails.imageUploadFirst != null) {
+                        $("#imageUploadFirstPreview").show();
+                        $("#imageUploadFirstShow").attr("src", result.productDetails.imageUploadFirst);
+                        $("#imageUploadFirstName").val(result.productDetails.imageUploadFirst + "," + result.productDetails.imageUploadFirstName)
+                    }
+                    if (result.productDetails.imageUploadSecond != null) {
+                        $("#imageUploadSecondPreview").show();
+                        $("#imageUploadSecondShow").attr("src", result.productDetails.imageUploadSecond);
+                        $("#imageUploadSecondName").val(result.productDetails.imageUploadSecond + "," + result.productDetails.imageUploadSecondName)
+                    }
+                    if (result.productDetails.imageUploadThird != null) {
+                        $("#imageUploadThirdPreview").show();
+                        $("#imageUploadThirdShow").attr("src", result.productDetails.imageUploadThird);
+                        $("#imageUploadThirdName").val(result.productDetails.imageUploadThird + "," + result.productDetails.imageUploadThirdName)
+                    }
+                    if (result.productDetails.imageUploadFourth != null) {
+                        $("#imageUploadFourthPreview").show();
+                        $("#imageUploadFourthShow").attr("src", result.productDetails.imageUploadFourth);
+                        $("#imageUploadFourthName").val(result.productDetails.imageUploadFourth + "," + result.productDetails.imageUploadFourthName)
+                    }
                 }
             });
         });
@@ -383,8 +472,7 @@
             $("#productSubCategoryName").val($("#productSubCategory option:selected").text());
         });
 
-        function SubcategorySelect(category_Key)
-        {
+        function SubcategorySelect(category_Key) {
             var categorySelected = $("#productCategory option:selected");
             $("#productCategoryName").val(categorySelected.text());
             $.ajax({
@@ -392,7 +480,7 @@
                 url: "/CategorySubcategory/LoadSubcategory",
                 data: { categoryKey: category_Key },
                 dataType: "json",
-                async:false,
+                async: false,
                 success: function (response) {
                     $("#productSubCategory").empty();
                     $("#productSubCategory").append("<option value=''>----Select Subcategory----</option>");
@@ -408,7 +496,7 @@
                 }
             });
         }
-        
+
     </script>
 }
 

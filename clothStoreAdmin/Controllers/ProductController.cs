@@ -87,12 +87,153 @@ namespace clothStoreAdmin.Controllers
         }
 
         [HttpPost]
-        public ActionResult EditProduct(string productId, EditProductViewModel epvm, string productStatus)
+        public async Task<ActionResult> EditProduct(string productId, EditProductViewModel epvm, string productStatus, ProductImageViewModel pivm)
         {
             var data = "Product Update Failed !";
             try
             {
                 var firebase = FirebaseConnection.FirebaseDatabase();
+                var productImage = FirebaseConnection.FirebaseStorageConnection();
+                var imageName = new StringBuilder();
+                if (pivm.imageUploadFirst != null)
+                {
+                    if(!string.IsNullOrEmpty(epvm.imageUploadFirstName))
+                    {
+                        await productImage.Child("Product").Child(epvm.imageUploadFirstName.Split(',')[1]).DeleteAsync();
+                    }
+                    imageName.Append(DateTime.Now.ToString("dd_MM_yyyy_hhmmss")).Append(Path.GetExtension(pivm.imageUploadFirst.FileName));
+                    var imagePath = await productImage.Child("Product").Child(imageName.ToString()).PutAsync(pivm.imageUploadFirst.InputStream);
+                    epvm.imageUploadFirst = imagePath;
+                    epvm.imageUploadFirstName = imageName.ToString();
+                }
+                else
+                {
+                    if (string.IsNullOrEmpty(epvm.imageUploadFirstName))
+                    {
+                        epvm.imageUploadFirst = null;
+                        epvm.imageUploadFirstName = null;
+                    }
+                    else
+                    {
+                        var splitImgUrl = epvm.imageUploadFirstName.Split(',');
+                        if(splitImgUrl.Length.Equals(2))
+                        {
+                            epvm.imageUploadFirst = splitImgUrl[0];
+                            epvm.imageUploadFirstName = splitImgUrl[1];
+                        }
+                        else
+                        {
+                            epvm.imageUploadFirst = null;
+                            epvm.imageUploadFirstName = null;
+                            await productImage.Child("Product").Child(splitImgUrl[1]).DeleteAsync();
+                        }
+                    }
+                }
+                if (pivm.imageUploadSecond != null)
+                {
+                    if (!string.IsNullOrEmpty(epvm.imageUploadSecondName))
+                    {
+                        await productImage.Child("Product").Child(epvm.imageUploadSecondName.Split(',')[1]).DeleteAsync();
+                    }
+                    imageName = new StringBuilder();
+                    imageName.Append(DateTime.Now.ToString("dd_MM_yyyy_hhmmss")).Append(Path.GetExtension(pivm.imageUploadSecond.FileName));
+                    var imagePath = await productImage.Child("Product").Child(imageName.ToString()).PutAsync(pivm.imageUploadSecond.InputStream);
+                    epvm.imageUploadSecond = imagePath;
+                    epvm.imageUploadSecondName = imageName.ToString();
+                }
+                else
+                {
+                    if (string.IsNullOrEmpty(epvm.imageUploadSecondName))
+                    {
+                        epvm.imageUploadSecond = null;
+                        epvm.imageUploadSecondName = null;
+                    }
+                    else
+                    {
+                        var splitImgUrl = epvm.imageUploadSecondName.Split(',');
+                        if (splitImgUrl.Length.Equals(2))
+                        {
+                            epvm.imageUploadSecond = splitImgUrl[0];
+                            epvm.imageUploadSecondName = splitImgUrl[1];
+                        }
+                        else
+                        {
+                            epvm.imageUploadSecond = null;
+                            epvm.imageUploadSecondName = null;
+                            await productImage.Child("Product").Child(splitImgUrl[1]).DeleteAsync();
+                        }
+                    }
+                }
+                if (pivm.imageUploadThird != null)
+                {
+                    if (!string.IsNullOrEmpty(epvm.imageUploadThirdName))
+                    {
+                        await productImage.Child("Product").Child(epvm.imageUploadThirdName.Split(',')[1]).DeleteAsync();
+                    }
+                    imageName = new StringBuilder();
+                    imageName.Append(DateTime.Now.ToString("dd_MM_yyyy_hhmmss")).Append(Path.GetExtension(pivm.imageUploadThird.FileName));
+                    var imagePath = await productImage.Child("Product").Child(imageName.ToString()).PutAsync(pivm.imageUploadThird.InputStream);
+                    epvm.imageUploadThird = imagePath;
+                    epvm.imageUploadThirdName = imageName.ToString();
+                }
+                else
+                {
+                    if (string.IsNullOrEmpty(epvm.imageUploadThirdName))
+                    {
+                        epvm.imageUploadThird = null;
+                        epvm.imageUploadThirdName = null;
+                    }
+                    else
+                    {
+                        var splitImgUrl = epvm.imageUploadThirdName.Split(',');
+                        if (splitImgUrl.Length.Equals(2))
+                        {
+                            epvm.imageUploadThird = splitImgUrl[0];
+                            epvm.imageUploadThirdName = splitImgUrl[1];
+                        }
+                        else
+                        {
+                            epvm.imageUploadThird = null;
+                            epvm.imageUploadThirdName = null;
+                            await productImage.Child("Product").Child(splitImgUrl[1]).DeleteAsync();
+                        }
+                    }
+                }
+                if (pivm.imageUploadFourth != null)
+                {
+                    if (!string.IsNullOrEmpty(epvm.imageUploadFourthName))
+                    {
+                        await productImage.Child("Product").Child(epvm.imageUploadFourthName.Split(',')[1]).DeleteAsync();
+                    }
+                    imageName = new StringBuilder();
+                    imageName.Append(DateTime.Now.ToString("dd_MM_yyyy_hhmmss")).Append(Path.GetExtension(pivm.imageUploadFourth.FileName));
+                    var imagePath = await productImage.Child("Product").Child(imageName.ToString()).PutAsync(pivm.imageUploadFourth.InputStream);
+                    epvm.imageUploadFourth = imagePath;
+                    epvm.imageUploadFourthName = imageName.ToString();
+                }
+                else
+                {
+                    if (string.IsNullOrEmpty(epvm.imageUploadFourthName))
+                    {
+                        epvm.imageUploadFourth = null;
+                        epvm.imageUploadFourthName = null;
+                    }
+                    else
+                    {
+                        var splitImgUrl = epvm.imageUploadFourthName.Split(',');
+                        if (splitImgUrl.Length.Equals(2))
+                        {
+                            epvm.imageUploadFourth = splitImgUrl[0];
+                            epvm.imageUploadFourthName = splitImgUrl[1];
+                        }
+                        else
+                        {
+                            epvm.imageUploadFourth = null;
+                            epvm.imageUploadFourthName = null;
+                            await productImage.Child("Product").Child(splitImgUrl[1]).DeleteAsync();
+                        }
+                    }
+                }
                 UserSession us = new UserSession();
                 epvm.userId = us.userId;
                 var prodUpdate = firebase.Child("productMaster").Child(us.userId).Child(productId).PutAsync(epvm);
