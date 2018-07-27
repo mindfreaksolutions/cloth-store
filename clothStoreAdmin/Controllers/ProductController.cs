@@ -271,8 +271,34 @@ namespace clothStoreAdmin.Controllers
                 UserSession us = new UserSession();
                 var firebase = FirebaseConnection.FirebaseDatabase();
                 var productDetails = await firebase.Child("productMaster").Child(us.userId).Child(productId).OnceSingleAsync<GetProductViewModel>();
-                productDetails.productActive = true;
+                switch(productStatus.ToLower())
+                {
+                    case "inactive":
+                        productDetails.productActive = false;
+                        break;
+                    case "active":
+                        productDetails.productActive = true;
+                        break;
+                    default:
+                        productDetails.productActive = false;
+                        break;
+                }
                 var prodUpdate = firebase.Child("productMaster").Child(us.userId).Child(productId).PutAsync(productDetails);
+                
+                //To add only active product list in Product fetch list to website
+                switch (productStatus.ToLower())
+                {
+                    case "inactive":
+                        await firebase.Child("productFetch").Child(productId).DeleteAsync();
+                        break;
+                    case "active":
+                        var prodAdded = firebase.Child("productFetch").Child(productId).PutAsync(productDetails);
+                        break;
+                    default:
+                        await firebase.Child("productFetch").Child(productId).DeleteAsync();
+                        break;
+                }
+
                 data = data.Replace("Failed", "Successfully");
                 //data = sb.Append("Product ").Append(productStatus).Append(" Successfully !").ToString();
             }
@@ -298,40 +324,52 @@ namespace clothStoreAdmin.Controllers
         [HttpPost]
         public async Task<JsonResult> GetProductList(bool productStatus)
         {
-            //var draw = Request.Form.GetValues("draw").FirstOrDefault();
-            //var start = Request.Form.GetValues("start").FirstOrDefault();
-            //var length = Request.Form.GetValues("length").FirstOrDefault();
-            //var sortColumn = Request.Form.GetValues("columns[" + Request.Form.GetValues("order[0][column]").FirstOrDefault() + "][name]").FirstOrDefault();
-            //var sortColumnDir = Request.Form.GetValues("order[0][dir]").FirstOrDefault();
-            //var searchValue = Request.Form.GetValues("search[value]").FirstOrDefault();
-            ////Paging Size (10,20,50,100)    
-            //int pageSize = length != null ? Convert.ToInt32(length) : 0;
-            //int skip = start != null ? Convert.ToInt32(start) : 0;
-            //int recordsTotal = 0;
-            var firebase = FirebaseConnection.FirebaseDatabase();
-            UserSession us = new UserSession();
-            var prodList = await firebase.Child("productMaster").Child(us.userId).OnceAsync<GetListProductViewModel>();
-            var productAdd = new List<GetListProductViewModel>();
-            foreach (var p in prodList)
+            var data = (dynamic)null;
+            try
             {
-                p.Object.productId = p.Key;
-                //p.Object.userId = us.userId;
-                productAdd.Add(p.Object);
+
+                //var draw = Request.Form.GetValues("draw").FirstOrDefault();
+                //var start = Request.Form.GetValues("start").FirstOrDefault();
+                //var length = Request.Form.GetValues("length").FirstOrDefault();
+                //var sortColumn = Request.Form.GetValues("columns[" + Request.Form.GetValues("order[0][column]").FirstOrDefault() + "][name]").FirstOrDefault();
+                //var sortColumnDir = Request.Form.GetValues("order[0][dir]").FirstOrDefault();
+                //var searchValue = Request.Form.GetValues("search[value]").FirstOrDefault();
+                ////Paging Size (10,20,50,100)    
+                //int pageSize = length != null ? Convert.ToInt32(length) : 0;
+                //int skip = start != null ? Convert.ToInt32(start) : 0;
+                //int recordsTotal = 0;
+                var firebase = FirebaseConnection.FirebaseDatabase();
+                UserSession us = new UserSession();
+                var prodList = await firebase.Child("productMaster").Child(us.userId).OrderBy("productActive").EqualTo(productStatus).OnceAsync<GetListProductViewModel>();
+                //var prodList = await firebase.Child("productMaster").Child(us.userId).OnceAsync<GetListProductViewModel>();
+                var productAdd = new List<GetListProductViewModel>();
+                foreach (var p in prodList)
+                {
+                    p.Object.productId = p.Key;
+                    //p.Object.userId = us.userId;
+                    productAdd.Add(p.Object);
+                }
+                ////Sorting    
+                //if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDir)))
+                //{
+                //    productAdd = productAdd.OrderBy(m => m.productTitle).ToList();
+                //}
+                ////Search    
+                //if (!string.IsNullOrEmpty(searchValue))
+                //{
+                //    productAdd = productAdd.Where(m => m.productTitle == searchValue).ToList();
+                //}
+                 data = new { data = productAdd };
+               return Json(data ,JsonRequestBehavior.AllowGet);
             }
-            ////Sorting    
-            //if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDir)))
-            //{
-            //    productAdd = productAdd.OrderBy(m => m.productTitle).ToList();
-            //}
-            ////Search    
-            //if (!string.IsNullOrEmpty(searchValue))
-            //{
-            //    productAdd = productAdd.Where(m => m.productTitle == searchValue).ToList();
-            //}
-            var data = new { data = productAdd};
+            catch (Exception ex)
+            {
+
+            }
+            return Json(data, JsonRequestBehavior.AllowGet);
+
             //recordsTotal = productAdd.Count;
             //productAdd = productAdd.Skip(skip).Take(pageSize).ToList();
-            return Json(data ,JsonRequestBehavior.AllowGet);
         }
     }
 }

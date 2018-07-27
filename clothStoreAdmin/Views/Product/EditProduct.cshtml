@@ -434,6 +434,7 @@
                     $('#productCategory').val(result.productDetails.productCategory);
                     SubcategorySelect(result.productDetails.productCategory);
                     $("#productSubCategory").val(result.productDetails.productSubCategory);
+                    $("#productSubCategoryName").val($("#productSubCategory option:selected").text());
                     var date = new Date(parseInt(result.productDetails.createdon.replace('/Date(', '')));
                     $("#createdon").val(date.toUTCString());
                     for (var i = 0; i < result.productDetails.prodVarients.length; i++) {
